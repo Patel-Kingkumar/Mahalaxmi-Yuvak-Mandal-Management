@@ -1,0 +1,9 @@
+CREATE PROCEDURE sp_DeleteUser
+    @Id INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DELETE FROM Users
+    WHERE Id = @Id
+END
