@@ -1,0 +1,17 @@
+CREATE TABLE Users (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    FullName NVARCHAR(150) NOT NULL,
+    Email NVARCHAR(150) NOT NULL UNIQUE,
+    PasswordHash NVARCHAR(500) NOT NULL,
+    
+    RoleId INT NOT NULL,
+
+    Otp NVARCHAR(10) NULL,
+    OtpExpiry DATETIME NULL,
+
+    IsActive BIT DEFAULT 1,
+    CreatedDate DATETIME DEFAULT GETDATE(),
+
+    CONSTRAINT FK_Users_Roles 
+        FOREIGN KEY (RoleId) REFERENCES Roles(Id)
+);

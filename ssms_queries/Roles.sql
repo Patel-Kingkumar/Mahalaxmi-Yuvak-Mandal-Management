@@ -1,0 +1,10 @@
+CREATE TABLE Roles (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    RoleName NVARCHAR(50) NOT NULL UNIQUE,
+    IsActive BIT DEFAULT 1,
+    CreatedDate DATETIME DEFAULT GETDATE()
+);
+
+
+INSERT INTO Roles (RoleName) VALUES ('Admin');
+INSERT INTO Roles (RoleName) VALUES ('User');
