@@ -1,15 +1,16 @@
-CREATE PROCEDURE sp_GetAllUsers
+ALTER PROCEDURE sp_GetAllUsers
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    SELECT 
-        Id,
-        FullName,
-        Email,
-        RoleId,       -- Use RoleId instead of Role
-        IsActive,
-        CreatedDate
-    FROM Users
-    WHERE IsActive = 1
+    SELECT
+        U.Id,
+        U.FullName,
+        U.Email,
+        R.RoleName AS Role,   -- map RoleName to User.Role
+        U.IsActive,
+        U.CreatedDate
+    FROM Users U
+    INNER JOIN Roles R ON U.RoleId = R.Id
+    WHERE U.IsActive = 1
 END

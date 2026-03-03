@@ -1,7 +1,9 @@
 ﻿using Microsoft.OpenApi.Models;
+using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
+QuestPDF.Settings.License = LicenseType.Community;
 // Add services
 builder.Services.AddControllers();
 

@@ -18,4 +18,12 @@ export class UserService {
       `${this.baseUrl}/${API_ENDPOINTS.USERS.BASE}/${API_ENDPOINTS.USERS.GET_ALL}`
     );
   }
+
+  downloadUsersPdf(): Observable<Blob> {
+    return this.http.get(
+      `${this.baseUrl}/${API_ENDPOINTS.USERS.BASE}/${API_ENDPOINTS.USERS.DOWNLOAD_PDF}`,
+      { responseType: 'blob' } // Critical for PDF files
+    );
+  }
+
 }
