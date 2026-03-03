@@ -20,11 +20,11 @@ export class LoginComponent {
   showOTP = false;
   message = '';
 
-  constructor(private fb: FormBuilder, private auth: AuthService) {
+  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
-      role: ['User', Validators.required] // default to User
+      roleName: ['User', Validators.required]
     });
 
     this.forgotForm = this.fb.group({
@@ -42,8 +42,13 @@ export class LoginComponent {
     if (this.loginForm.invalid) return;
 
     this.auth.login(this.loginForm.value).subscribe({
-      next: res => this.message = 'Login successful!',
-      error: err => this.message = 'Invalid credentials or role.'
+      next: res => {
+        this.message = 'Login successful!';
+        this.router.navigate(['/dashboard']);   // ✅ Redirect here
+      },
+      error: err => {
+        this.message = 'Invalid credentials or role.';
+      }
     });
   }
 
