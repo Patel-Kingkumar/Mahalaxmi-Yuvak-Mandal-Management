@@ -1,0 +1,6 @@
+@Mahalaxmi_Yuvak_Mandal.Server_HostAddress = http://localhost:5102
+
+GET {{Mahalaxmi_Yuvak_Mandal.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
