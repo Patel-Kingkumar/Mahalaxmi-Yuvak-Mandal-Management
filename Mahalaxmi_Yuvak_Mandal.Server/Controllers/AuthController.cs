@@ -1,10 +1,14 @@
-﻿using Mahalaxmi_Yuvak_Mandal.Server.Models;
+﻿using BCrypt.Net;
+using Mahalaxmi_Yuvak_Mandal.Server.DTOs;
+using Mahalaxmi_Yuvak_Mandal.Server.Models;
+using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
-using BCrypt.Net;
+using MimeKit;
+using MimeKit;
 using System.Data;
-using Mahalaxmi_Yuvak_Mandal.Server.DTOs;
+using System.Net.Mail;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -119,29 +123,119 @@ public class AuthController : ControllerBase
         return Ok(new { Message = "Password reset successful" });
     }
 
+    //[HttpPost("send-otp")]
+    //public async Task<IActionResult> SendOtp([FromBody] SendOtpRequestDTO model)
+    //{
+    //    var otp = new Random().Next(100000, 999999).ToString();
+
+    //    using var con = GetConnection();
+
+    //    // Step 1: Check if the email exists in Users table
+    //    string queryCheckUser = "SELECT Email FROM Users WHERE Email = @Email";
+    //    using var checkUserCmd = new SqlCommand(queryCheckUser, con);
+    //    checkUserCmd.Parameters.AddWithValue("@Email", model.Email);
+
+    //    await con.OpenAsync();
+    //    var userEmail = await checkUserCmd.ExecuteScalarAsync() as string;
+
+    //    if (string.IsNullOrEmpty(userEmail))
+    //    {
+    //        return NotFound(new { Message = "User not found" });
+    //    }
+
+    //    // Step 2: Save OTP in DB via stored procedure
+    //    using var cmd = new SqlCommand("sp_GenerateOtp", con);
+    //    cmd.CommandType = CommandType.StoredProcedure;
+    //    cmd.Parameters.AddWithValue("@Email", userEmail);
+    //    cmd.Parameters.AddWithValue("@Otp", otp);
+
+    //    var rows = await cmd.ExecuteNonQueryAsync();
+
+    //    if (rows == 0)
+    //        return NotFound(new { Message = "Failed to save OTP" });
+
+    //    // Step 3: Send OTP email from your fixed Gmail to user's email
+    //    var message = new MimeMessage();
+    //    message.From.Add(new MailboxAddress("Mahalaxmi Yuvak Mandal", "kingpatel2275479@gmail.com"));
+    //    message.To.Add(MailboxAddress.Parse(userEmail));
+    //    message.Subject = "Your OTP Code";
+    //    message.Body = new TextPart("plain")
+    //    {
+    //        Text = $"Your OTP code is: {otp}. It is valid for 10 minutes."
+    //    };
+
+    //    using var smtp = new MailKit.Net.Smtp.SmtpClient();
+    //    await smtp.ConnectAsync("smtp.gmail.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
+    //    await smtp.AuthenticateAsync("kingpatel2275479@gmail.com", "KingPatel2275"); // Use your app password here!
+    //    await smtp.SendAsync(message);
+    //    await smtp.DisconnectAsync(true);
+
+    //    return Ok(new { Message = "OTP sent successfully" });
+    //}
+
+    // 16 character app password
     [HttpPost("send-otp")]
     public async Task<IActionResult> SendOtp([FromBody] SendOtpRequestDTO model)
     {
-        // 1️⃣ Generate a 6-digit OTP
+        // Generate a secure 6-digit OTP
         var otp = new Random().Next(100000, 999999).ToString();
 
         using var con = GetConnection();
+        await con.OpenAsync();
+
+        // Step 1: Check if the email exists in Users table
+        string queryCheckUser = "SELECT Email FROM Users WHERE Email = @Email";
+        using var checkUserCmd = new SqlCommand(queryCheckUser, con);
+        checkUserCmd.Parameters.AddWithValue("@Email", model.Email);
+
+        var userEmail = await checkUserCmd.ExecuteScalarAsync() as string;
+
+        if (string.IsNullOrEmpty(userEmail))
+        {
+            return NotFound(new { Message = "User not found" });
+        }
+
+        // Step 2: Save OTP in DB via stored procedure
         using var cmd = new SqlCommand("sp_GenerateOtp", con);
         cmd.CommandType = CommandType.StoredProcedure;
-
-        cmd.Parameters.AddWithValue("@Email", model.Email);
+        cmd.Parameters.AddWithValue("@Email", userEmail);
         cmd.Parameters.AddWithValue("@Otp", otp);
 
-        await con.OpenAsync();
         var rows = await cmd.ExecuteNonQueryAsync();
 
         if (rows == 0)
-            return NotFound(new { Message = "User not found" });
+            return NotFound(new { Message = "Failed to save OTP" });
 
-        // 2️⃣ TODO: Send OTP via email (SMTP or any email service)
-        // Example:
-        // await _emailService.SendOtpEmail(model.Email, otp);
+        // Step 3: Send OTP email using the NEW App Password
+        try
+        {
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress("Mahalaxmi Yuvak Mandal", "kingpatel2275479@gmail.com"));
+            message.To.Add(MailboxAddress.Parse(userEmail));
+            message.Subject = "Your OTP Code";
+            message.Body = new TextPart("plain")
+            {
+                Text = $"Your OTP code is: {otp}. It is valid for 10 minutes."
+            };
 
-        return Ok(new { Message = "OTP sent successfully", Otp = otp });
+            using var smtp = new MailKit.Net.Smtp.SmtpClient();
+
+            // Connect using STARTTLS on port 587
+            await smtp.ConnectAsync("smtp.gmail.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
+
+            // AUTHENTICATION: Use the 16-character key from your screenshot (NO SPACES)
+            await smtp.AuthenticateAsync("kingpatel2275479@gmail.com", "sqhygvyrhumszrge");
+
+            await smtp.SendAsync(message);
+            await smtp.DisconnectAsync(true);
+
+            return Ok(new { Message = "OTP sent successfully" });
+        }
+        catch (Exception ex)
+        {
+            // Log the error if the mail fails but DB was updated
+            return StatusCode(500, new { Message = "OTP saved but email failed to send.", Error = ex.Message });
+        }
     }
+
 }
