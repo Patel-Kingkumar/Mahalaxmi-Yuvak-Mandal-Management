@@ -118,4 +118,30 @@ public class AuthController : ControllerBase
 
         return Ok(new { Message = "Password reset successful" });
     }
+
+    [HttpPost("send-otp")]
+    public async Task<IActionResult> SendOtp([FromBody] SendOtpRequestDTO model)
+    {
+        // 1️⃣ Generate a 6-digit OTP
+        var otp = new Random().Next(100000, 999999).ToString();
+
+        using var con = GetConnection();
+        using var cmd = new SqlCommand("sp_GenerateOtp", con);
+        cmd.CommandType = CommandType.StoredProcedure;
+
+        cmd.Parameters.AddWithValue("@Email", model.Email);
+        cmd.Parameters.AddWithValue("@Otp", otp);
+
+        await con.OpenAsync();
+        var rows = await cmd.ExecuteNonQueryAsync();
+
+        if (rows == 0)
+            return NotFound(new { Message = "User not found" });
+
+        // 2️⃣ TODO: Send OTP via email (SMTP or any email service)
+        // Example:
+        // await _emailService.SendOtpEmail(model.Email, otp);
+
+        return Ok(new { Message = "OTP sent successfully", Otp = otp });
+    }
 }

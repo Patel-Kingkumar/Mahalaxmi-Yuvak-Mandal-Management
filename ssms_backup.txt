@@ -47,3 +47,32 @@ CREATE TABLE PasswordResetLogs (
 
 INSERT INTO Roles (RoleName) VALUES ('Admin');
 INSERT INTO Roles (RoleName) VALUES ('User');
+
+
+
+
+
+INSERT INTO Users
+(
+    FullName,
+    Email,
+    PasswordHash,
+    RoleId,
+    IsActive,
+    CreatedDate
+)
+VALUES
+(
+    'King Patel',
+    'kingpatel0409@gmail.com',
+    '$2a$11$PUT_YOUR_HASHED_PASSWORD_HERE',
+    2, -- 1 = Admin, 2 = User
+    1,
+    GETDATE()
+);
+
+
+SELECT U.FullName, U.Email, R.RoleName
+FROM Users U
+INNER JOIN Roles R ON U.RoleId = R.Id
+WHERE Email = 'kingpatel0409@gmail.com';

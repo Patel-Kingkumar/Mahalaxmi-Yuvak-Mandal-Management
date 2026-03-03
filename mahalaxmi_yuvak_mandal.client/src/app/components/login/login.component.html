@@ -1,4 +1,47 @@
-<p>login works!</p>
-<button class="btn btn-primary" (click)="goToDashboard()">
-  Go To Dashboard
-</button>
+<div class="login-container">
+  <h2>Login</h2>
+
+  <div *ngIf="!showForgot && !showOTP">
+    <form [formGroup]="loginForm" (ngSubmit)="login()">
+      <input type="email" placeholder="Email" formControlName="email" />
+      <input
+        type="password"
+        placeholder="Password"
+        formControlName="password"
+      />
+      <select formControlName="role">
+        <option>User</option>
+        <option>Admin</option>
+      </select>
+      <button type="submit">Login</button>
+    </form>
+    <a (click)="forgotPassword()">Forgot Password?</a>
+  </div>
+
+  <div *ngIf="showForgot && !showOTP">
+    <h3>Forgot Password</h3>
+    <form [formGroup]="forgotForm" (ngSubmit)="sendOTP()">
+      <input
+        type="email"
+        placeholder="Enter your email"
+        formControlName="email"
+      />
+      <button type="submit">Send OTP</button>
+    </form>
+  </div>
+
+  <div *ngIf="showOTP">
+    <h3>Reset Password</h3>
+    <form [formGroup]="otpForm" (ngSubmit)="resetPassword()">
+      <input type="text" placeholder="OTP" formControlName="otp" />
+      <input
+        type="password"
+        placeholder="New Password"
+        formControlName="newPassword"
+      />
+      <button type="submit">Reset Password</button>
+    </form>
+  </div>
+
+  <p class="message">{{ message }}</p>
+</div>
