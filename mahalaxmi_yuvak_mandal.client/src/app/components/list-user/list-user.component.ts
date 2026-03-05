@@ -17,21 +17,8 @@ export class ListUserComponent {
 
   getUsers() {
     this.userService.getAllUsers().subscribe(users => {
-      console.log("Users:", users);
       this.users = users;
     });
-  }
-
-  editUser(user: any) {
-    console.log("Edit user:", user);
-    // Navigate to edit page or open modal
-  }
-
-  deleteUser(userId: number) {
-    if (confirm("Are you sure you want to delete this user?")) {
-      console.log("Delete user with ID:", userId);
-      // Call your delete API here
-    }
   }
 
   downloadPdfReport(): void {
@@ -55,6 +42,31 @@ export class ListUserComponent {
         // Optional: Add a toast notification here
       }
     });
+  }
+
+  deleteUser(id: number) {
+
+    if (!confirm('Are you sure you want to delete this user?')) {
+      return;
+    }
+
+    this.userService.deleteUser(id).subscribe({
+      next: () => {
+        alert("User deleted successfully");
+
+        // refresh list
+        this.getUsers();
+      },
+      error: (err) => {
+        alert(err.error);
+      }
+    });
+
+  }
+
+  editUser(user: any) {
+    console.log("Edit user:", user);
+    // Navigate to edit page or open modal
   }
 
 }
