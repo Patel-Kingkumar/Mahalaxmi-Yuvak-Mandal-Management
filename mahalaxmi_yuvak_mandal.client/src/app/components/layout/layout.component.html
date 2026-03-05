@@ -197,23 +197,33 @@
               <p>Dashboard</p>
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link">
+          <li class="nav-item has-treeview">
+            <a class="nav-link" data-toggle="treeview">
               <i class="nav-icon fas fa-tree"></i>
               <p>
                 Users
-                <i class="fas fa-angle-left right"></i>
+                <i class="right fas fa-angle-left"></i>
               </p>
             </a>
+
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a class="nav-link" [routerLink]="['/create-user']">
+                <a
+                  routerLink="/create-user"
+                  routerLinkActive="active"
+                  class="nav-link"
+                >
                   <i class="far fa-circle nav-icon"></i>
                   <p>Create User</p>
                 </a>
               </li>
+
               <li class="nav-item">
-                <a [routerLink]="['/list-users']" class="nav-link">
+                <a
+                  routerLink="/list-users"
+                  routerLinkActive="active"
+                  class="nav-link"
+                >
                   <i class="far fa-circle nav-icon"></i>
                   <p>User List</p>
                 </a>
