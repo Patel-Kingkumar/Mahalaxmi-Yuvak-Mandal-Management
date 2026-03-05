@@ -39,4 +39,17 @@ export class UserService {
     );
   }
 
+  getUserById(id: number) {
+    return this.http.get<any>(
+      `${this.baseUrl}/${API_ENDPOINTS.USERS.BASE}/${id}`
+    );
+  }
+
+
+  updateUser(id: number, user: any) {
+    return this.http.put(
+      `${this.baseUrl}/${API_ENDPOINTS.USERS.BASE}/${id}`,
+      user
+    );
+  }
 }

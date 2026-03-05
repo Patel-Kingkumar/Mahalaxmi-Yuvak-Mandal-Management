@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { UserService } from '../../services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list-user',
@@ -11,7 +12,7 @@ export class ListUserComponent {
 
   users: any[] = [];
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private router: Router) {
     this.getUsers();
   }
 
@@ -65,8 +66,7 @@ export class ListUserComponent {
   }
 
   editUser(user: any) {
-    console.log("Edit user:", user);
-    // Navigate to edit page or open modal
+    this.router.navigate(['/edit-user', user.id]);
   }
 
 }
