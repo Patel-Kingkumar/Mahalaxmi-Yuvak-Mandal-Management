@@ -15,23 +15,23 @@ export class LayoutComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
 
-    this.router.events.subscribe(event => {
+    // this.router.events.subscribe(event => {
 
-      if (event instanceof NavigationEnd) {
+    //   if (event instanceof NavigationEnd) {
 
-        setTimeout(() => {
-          $('[data-widget="treeview"]').Treeview('init');
-        });
+    //     setTimeout(() => {
+    //       $('[data-widget="treeview"]').Treeview('init');
+    //     });
 
-      }
+    //   }
 
-    });
+    // });
 
   }
 
   ngAfterViewInit(): void {
 
-    $('[data-widget="treeview"]').Treeview('init');
+    // $('[data-widget="treeview"]').Treeview('init');
 
   }
 

@@ -56,15 +56,23 @@ export class EditUserComponent {
 
     if (this.editForm.invalid) return;
 
-    this.userService.updateUser(this.userId, this.editForm.value)
+    const formData = {
+      ...this.editForm.value,
+      isActive: this.editForm.value.isActive === true || this.editForm.value.isActive === 'true'
+    };
+
+    this.userService.updateUser(this.userId, formData)
       .subscribe({
         next: () => {
           alert("User updated successfully");
-
           this.router.navigate(['/list-users']);
+        },
+        error: (err) => {
+          console.log(err);
         }
       });
 
   }
+
 
 }

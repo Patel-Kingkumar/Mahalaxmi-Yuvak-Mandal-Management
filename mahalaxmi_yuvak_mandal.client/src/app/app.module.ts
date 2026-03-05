@@ -14,6 +14,7 @@ import { ListUserComponent } from './components/list-user/list-user.component';
 import { CommonModule } from '@angular/common';
 import { CreateUserComponent } from './components/create-user/create-user.component';
 import { EditUserComponent } from './components/edit-user/edit-user.component';
+import { AdminListComponent } from './components/admin-list/admin-list.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { EditUserComponent } from './components/edit-user/edit-user.component';
     DashboardComponent,
     ListUserComponent,
     CreateUserComponent,
-    EditUserComponent
+    EditUserComponent,
+    AdminListComponent
   ],
   imports: [
     BrowserModule,

@@ -6,6 +6,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ListUserComponent } from './components/list-user/list-user.component';
 import { CreateUserComponent } from './components/create-user/create-user.component';
 import { EditUserComponent } from './components/edit-user/edit-user.component';
+import { AdminListComponent } from './components/admin-list/admin-list.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -22,6 +23,7 @@ const routes: Routes = [
       { path: 'create-user', component: CreateUserComponent },
       { path: 'edit-user/:id', component: EditUserComponent },
       { path: 'list-users', component: ListUserComponent },
+      { path: 'list-admins', component: AdminListComponent },
     ]
   },
 
