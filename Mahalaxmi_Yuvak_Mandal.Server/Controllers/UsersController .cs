@@ -1,23 +1,11 @@
 ﻿using Dapper;
-using Dapper;
 using Mahalaxmi_Yuvak_Mandal.Server.DTOs;
 using Mahalaxmi_Yuvak_Mandal.Server.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient; // FIX: Use Microsoft.Data.SqlClient instead of System.Data.SqlClient
-using QuestPDF.Drawing;
-using QuestPDF.Drawing;   // For custom colors
-using QuestPDF.Fluent;
-using QuestPDF.Fluent;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers; // for Colors
-using QuestPDF.Helpers;   // For predefined colors like Colors.White
-using QuestPDF.Helpers;
-using QuestPDF.Infrastructure;
-using QuestPDF.Infrastructure;
 using System.Data;
-using System.Data.SqlClient;
-using System.Reflection.Metadata;
 
 namespace Mahalaxmi_Yuvak_Mandal.Server.Controllers
 {

@@ -1,0 +1,86 @@
+<div class="card card-primary">
+  <div class="card-header">
+    <h3 class="card-title">Create User</h3>
+  </div>
+
+  <form [formGroup]="createUserForm" (ngSubmit)="submit()">
+    <div class="card-body">
+      <!-- Full Name -->
+      <div class="form-group mb-3">
+        <label>Full Name</label>
+        <input type="text" class="form-control" formControlName="fullName" />
+
+        <small
+          class="text-danger"
+          *ngIf="
+            createUserForm.get('fullName')?.touched &&
+            createUserForm.get('fullName')?.invalid
+          "
+        >
+          Full Name is required
+        </small>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group mb-3">
+        <label>Email</label>
+        <input type="email" class="form-control" formControlName="email" />
+
+        <small
+          class="text-danger"
+          *ngIf="
+            createUserForm.get('email')?.touched &&
+            createUserForm.get('email')?.invalid
+          "
+        >
+          Valid email required
+        </small>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group mb-3">
+        <label>Password</label>
+        <input
+          type="password"
+          class="form-control"
+          formControlName="password"
+        />
+
+        <small
+          class="text-danger"
+          *ngIf="
+            createUserForm.get('password')?.touched &&
+            createUserForm.get('password')?.invalid
+          "
+        >
+          Minimum 6 characters required
+        </small>
+      </div>
+
+      <!-- Role Dropdown -->
+      <div class="form-group mb-3">
+        <label>Role</label>
+
+        <select class="form-control" formControlName="role">
+          <option *ngFor="let role of roles" [value]="role">
+            {{ role }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Active -->
+      <div class="form-check mb-3">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          formControlName="isActive"
+        />
+        <label class="form-check-label">Active</label>
+      </div>
+    </div>
+
+    <div class="card-footer">
+      <button type="submit" class="btn btn-primary">Create User</button>
+    </div>
+  </form>
+</div>

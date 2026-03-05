@@ -26,4 +26,11 @@ export class UserService {
     );
   }
 
+  createUser(user: any): Observable<any> {
+    return this.http.post(
+      `${this.baseUrl}/${API_ENDPOINTS.USERS.BASE}`,
+      user
+    );
+  }
+
 }

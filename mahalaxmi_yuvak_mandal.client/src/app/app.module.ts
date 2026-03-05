@@ -12,6 +12,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ListUserComponent } from './components/list-user/list-user.component';
 import { CommonModule } from '@angular/common';
+import { CreateUserComponent } from './components/create-user/create-user.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { CommonModule } from '@angular/common';
     SidebarComponent,
     LayoutComponent,
     DashboardComponent,
-    ListUserComponent
+    ListUserComponent,
+    CreateUserComponent
   ],
   imports: [
     BrowserModule,
