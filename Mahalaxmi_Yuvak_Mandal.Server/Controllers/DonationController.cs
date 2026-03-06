@@ -26,23 +26,28 @@ namespace Mahalaxmi_Yuvak_Mandal.Server.Controllers
         // ==============================
         // GET ALL DONATIONS
         // ==============================
-        [HttpGet]
-        public async Task<IActionResult> GetDonations()
+        // ==============================
+        // GET ALL DONATIONS OR BY USER
+        // ==============================
+        [HttpGet("get-donations")]
+        public async Task<IActionResult> GetDonations(int? userId)
         {
             using var con = GetConnection();
 
             var donations = await con.QueryAsync<DonationList>(
                 "sp_GetDonations",
+                new { UserId = userId },
                 commandType: CommandType.StoredProcedure
             );
 
             return Ok(donations);
         }
 
+
         // ==============================
         // GET DONATION BY ID
         // ==============================
-        [HttpGet("{id}")]
+        [HttpGet("get-donation/{id}")]
         public async Task<IActionResult> GetDonationById(int id)
         {
             using var con = GetConnection();
@@ -62,7 +67,7 @@ namespace Mahalaxmi_Yuvak_Mandal.Server.Controllers
         // ==============================
         // CREATE DONATION
         // ==============================
-        [HttpPost]
+        [HttpPost("create-donation")]
         public async Task<IActionResult> CreateDonation([FromBody] DonationDTO model)
         {
             using var con = GetConnection();
@@ -87,7 +92,7 @@ namespace Mahalaxmi_Yuvak_Mandal.Server.Controllers
         // ==============================
         // UPDATE DONATION
         // ==============================
-        [HttpPut("{id}")]
+        [HttpPut("update-donation/{id}")]
         public async Task<IActionResult> UpdateDonation(int id, [FromBody] DonationDTO model)
         {
             using var con = GetConnection();
@@ -113,7 +118,7 @@ namespace Mahalaxmi_Yuvak_Mandal.Server.Controllers
         // ==============================
         // DELETE DONATION
         // ==============================
-        [HttpDelete("{id}")]
+        [HttpDelete("delete-donation/{id}")]
         public async Task<IActionResult> DeleteDonation(int id)
         {
             using var con = GetConnection();

@@ -1,0 +1,45 @@
+<div class="card">
+  <div class="card-header bg-primary text-white">
+    <h4>Add Donation</h4>
+  </div>
+
+  <div class="card-body">
+    <form [formGroup]="donationForm" (ngSubmit)="submit()">
+      <!-- USER -->
+      <div class="mb-3">
+        <label>User</label>
+        <select class="form-control" formControlName="userId">
+          <option value="">Select User</option>
+          <option *ngFor="let user of users" [value]="user.id">
+            {{ user.fullName }}
+          </option>
+        </select>
+      </div>
+
+      <!-- CELEBRATION -->
+      <div class="mb-3">
+        <label>Celebration</label>
+        <select class="form-control" formControlName="celebrationId">
+          <option value="">Select Celebration</option>
+          <option *ngFor="let c of celebrations" [value]="c.id">
+            {{ c.name }}
+          </option>
+        </select>
+      </div>
+
+      <!-- AMOUNT -->
+      <div class="mb-3">
+        <label>Donation Amount</label>
+        <input type="number" class="form-control" formControlName="amount" />
+      </div>
+
+      <!-- YEAR -->
+      <div class="mb-3">
+        <label>Year</label>
+        <input type="number" class="form-control" formControlName="year" />
+      </div>
+
+      <button class="btn btn-success">Save Donation</button>
+    </form>
+  </div>
+</div>

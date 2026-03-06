@@ -8,6 +8,8 @@ import { CreateUserComponent } from './components/create-user/create-user.compon
 import { EditUserComponent } from './components/edit-user/edit-user.component';
 import { AdminListComponent } from './components/admin-list/admin-list.component';
 import { authGuard } from './guards/guards/auth.guard';
+import { CreateDonationComponent } from './components/create-donation/create-donation.component';
+import { ListDonationComponent } from './components/list-donation/list-donation.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -36,9 +38,15 @@ const routes: Routes = [
         canActivate: [authGuard],
         data: { roles: ['admin'] }
       },
-
+      {
+        path: 'create-donation',
+        component: CreateDonationComponent,
+        canActivate: [authGuard],
+        data: { roles: ['admin'] }
+      },
       { path: 'list-users', component: ListUserComponent },
-      { path: 'list-admins', component: AdminListComponent }
+      { path: 'list-admins', component: AdminListComponent },
+      { path: 'list-donation', component: ListDonationComponent }
     ]
   },
 

@@ -16,6 +16,8 @@ import { EditUserComponent } from './components/edit-user/edit-user.component';
 import { AdminListComponent } from './components/admin-list/admin-list.component';
 import { HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { interceptorsInterceptor } from './intercepter/interceptors.interceptor';
+import { CreateDonationComponent } from './components/create-donation/create-donation.component';
+import { ListDonationComponent } from './components/list-donation/list-donation.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,9 @@ import { interceptorsInterceptor } from './intercepter/interceptors.interceptor'
     ListUserComponent,
     CreateUserComponent,
     EditUserComponent,
-    AdminListComponent
+    AdminListComponent,
+    CreateDonationComponent,
+    ListDonationComponent
   ],
   imports: [
     BrowserModule,

@@ -4,6 +4,7 @@
     {
         public int DonationId { get; set; }
 
+        public int UserId { get; set; }   // Added
         public string FullName { get; set; }
 
         public string CelebrationName { get; set; }

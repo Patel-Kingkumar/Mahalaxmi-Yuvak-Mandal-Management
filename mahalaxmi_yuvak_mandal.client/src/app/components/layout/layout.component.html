@@ -112,6 +112,32 @@
               </li>
             </ul>
           </li>
+
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-users"></i>
+              <p>
+                Donation
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a [routerLink]="['/create-donation']" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Create Donation</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a [routerLink]="['/list-donation']" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Donation List</p>
+                </a>
+              </li>
+            </ul>
+          </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

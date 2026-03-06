@@ -1,0 +1,31 @@
+<div class="card">
+  <div class="card-header">
+    <h3>Donation List</h3>
+  </div>
+
+  <div class="card-body">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>User</th>
+          <th>Celebration</th>
+          <th>Amount</th>
+          <th>Year</th>
+          <th>Donation Entry</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let donation of donations">
+          <td>{{ donation.donationId }}</td>
+          <td>{{ donation.fullName }}</td>
+          <td>{{ donation.celebrationName }}</td>
+          <td>₹ {{ donation.amount }}</td>
+          <td>{{ donation.year }}</td>
+          <td>{{ donation.donationDate | date: "dd-MMM-yyyy hh:mm a" }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

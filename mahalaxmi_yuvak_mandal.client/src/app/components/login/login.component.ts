@@ -47,6 +47,7 @@ export class LoginComponent {
         console.log("res  : ", res);
         // ✅ Store JWT Token
         sessionStorage.setItem('token', res.token);
+        sessionStorage.setItem('userId', res.userId);
 
         // ✅ Store user role
         sessionStorage.setItem('role', res.role);
