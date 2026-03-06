@@ -15,6 +15,8 @@ export class DashboardComponent {
   @ViewChild('chartCanvasBarChart') barChartRef!: ElementRef;
 
   users: any[] = [];
+  doughnutChart: any;
+  barChart: any;
 
   constructor(private userService: UserService) { }
 
