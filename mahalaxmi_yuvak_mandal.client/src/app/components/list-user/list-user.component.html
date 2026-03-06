@@ -20,7 +20,7 @@
           <th>Role</th>
           <th class="text-center">Active</th>
           <th>Created Date</th>
-          <th class="text-center">Actions</th>
+          <th class="text-center" *ngIf="userRole === 'Admin'">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -42,7 +42,7 @@
             </span>
           </td>
           <td>{{ user.createdDate | date: "dd-MMM-yyyy" }}</td>
-          <td class="text-center">
+          <td class="text-center" *ngIf="userRole === 'Admin'">
             <button
               class="btn btn-sm btn-outline-primary me-1"
               (click)="editUser(user)"

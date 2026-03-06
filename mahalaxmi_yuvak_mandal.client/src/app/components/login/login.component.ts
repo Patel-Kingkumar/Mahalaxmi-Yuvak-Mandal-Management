@@ -43,6 +43,12 @@ export class LoginComponent {
 
     this.auth.login(this.loginForm.value).subscribe({
       next: res => {
+        console.log("res  : ", res);
+        // ✅ Store JWT Token
+        sessionStorage.setItem('token', res.token);
+
+        // ✅ Store user role
+        sessionStorage.setItem('role', res.role);
         this.message = 'Login successful!';
         this.router.navigate(['/dashboard']);   // ✅ Redirect here
       },

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
 
@@ -8,14 +8,17 @@ import { Router } from '@angular/router';
   templateUrl: './list-user.component.html',
   styleUrl: './list-user.component.css'
 })
-export class ListUserComponent {
+export class ListUserComponent implements OnInit {
 
   users: any[] = [];
-
+  userRole: string = '';
   constructor(private userService: UserService, private router: Router) {
     this.getUsers();
   }
 
+  ngOnInit(): void {
+    this.userRole = sessionStorage.getItem('role') || '';
+  }
   getUsers() {
     this.userService.getAllUsers().subscribe(users => {
       this.users = users;

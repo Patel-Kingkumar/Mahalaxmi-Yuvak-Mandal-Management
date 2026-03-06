@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Mahalaxmi_Yuvak_Mandal.Server.DTOs;
 using Mahalaxmi_Yuvak_Mandal.Server.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient; // FIX: Use Microsoft.Data.SqlClient instead of System.Data.SqlClient
 using QuestPDF.Fluent;
@@ -41,6 +42,7 @@ namespace Mahalaxmi_Yuvak_Mandal.Server.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
 public async Task<IActionResult> CreateUser([FromBody] CreateUserRequestDTO model)
         {
@@ -85,6 +87,7 @@ public async Task<IActionResult> CreateUser([FromBody] CreateUserRequestDTO mode
 
 
         // GET by Id
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
             public async Task<IActionResult> GetUserById(int id)
             {
@@ -101,6 +104,7 @@ public async Task<IActionResult> CreateUser([FromBody] CreateUserRequestDTO mode
             }
 
         // PUT /api/Users/{id}
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserRequestDTO model)
         {
@@ -135,6 +139,7 @@ public async Task<IActionResult> CreateUser([FromBody] CreateUserRequestDTO mode
         }
 
         // DELETE /api/Users/{id}
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
             public async Task<IActionResult> DeleteUser(int id)
             {
@@ -149,114 +154,6 @@ public async Task<IActionResult> CreateUser([FromBody] CreateUserRequestDTO mode
 
                 return Ok(new { Message = "User deleted successfully" });
             }
-
-        //    [HttpGet("DownloadUsersPdf")]
-        //    public async Task<IActionResult> DownloadUsersPdf()
-        //    {
-        //        using var con = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-        //        var users = await con.QueryAsync<User>("sp_GetAllUsers", commandType: CommandType.StoredProcedure);
-
-        //        using var ms = new MemoryStream();
-        //        var writer = new PdfWriter(ms);
-        //        var pdf = new PdfDocument(writer);
-        //        var document = new Document(pdf);
-
-        //        // -- Header section like your receipt --
-
-        //        // Add the top orange banner with text
-        //        var orangeColor = new DeviceRgb(243, 115, 53); // #f37335 approx
-
-        //        // Background rectangle for header
-        //        var headerTable = new Table(UnitValue.CreatePercentArray(new float[] { 1 })).UseAllAvailableWidth();
-        //        headerTable.SetBackgroundColor(orangeColor);
-        //        headerTable.SetPadding(10);
-        //        headerTable.AddCell(new Cell()
-        //            .Add(new Paragraph("Mahalakshmi Yuvak Mandal")
-        //                .SetFontSize(18)
-        //                .SetFontColor(ColorConstants.White)
-        //                .SetBold())
-        //            .SetBorder(Border.NO_BORDER)
-        //            .SetTextAlignment(TextAlignment.CENTER));
-        //        headerTable.AddCell(new Cell()
-        //            .Add(new Paragraph("Dumas, Surat, Gujarat")
-        //                .SetFontSize(12)
-        //                .SetFontColor(ColorConstants.White))
-        //            .SetBorder(Border.NO_BORDER)
-        //            .SetTextAlignment(TextAlignment.CENTER));
-        //        document.Add(headerTable);
-
-        //        document.Add(new Paragraph("\n"));
-
-        //        // Title section
-        //        document.Add(new Paragraph("Users List").SetFontSize(16).SetBold().SetTextAlignment(TextAlignment.CENTER));
-        //        document.Add(new Paragraph($"Generated On: {DateTime.Now:dd-MM-yyyy HH:mm}").SetFontSize(10).SetTextAlignment(TextAlignment.CENTER));
-        //        document.Add(new Paragraph("\n"));
-
-        //        // -- User Table --
-
-        //        var table = new Table(UnitValue.CreatePercentArray(new float[] { 3, 5, 6, 3, 2, 4 })).UseAllAvailableWidth();
-
-        //        // Table Header
-        //        var headers = new[] { "ID", "Full Name", "Email", "Role", "Active", "Created Date" };
-        //        foreach (var h in headers)
-        //        {
-        //            table.AddHeaderCell(new Cell().Add(new Paragraph(h).SetBold()).SetBackgroundColor(ColorConstants.LIGHT_GRAY));
-        //        }
-
-        //        // Table Rows
-        //        foreach (var user in users)
-        //        {
-        //            table.AddCell(user.Id.ToString());
-        //            table.AddCell(user.FullName);
-        //            table.AddCell(user.Email);
-        //            table.AddCell(user.Role ?? "N/A");
-        //            table.AddCell(user.IsActive ? "Yes" : "No");
-        //            table.AddCell(user.CreatedDate.ToString("dd-MM-yyyy"));
-        //        }
-
-        //        document.Add(table);
-
-        //        document.Add(new Paragraph("\n\n"));
-
-        //        // Footer - Signature and ESTD Stamp style
-
-        //        // Add signature placeholder
-        //        var signature = new Paragraph("Authorized Signature")
-        //            .SetFontSize(12)
-        //            .SetTextAlignment(TextAlignment.RIGHT);
-
-        //        var signatureLine = new Paragraph("______________________")
-        //            .SetFontSize(12)
-        //            .SetTextAlignment(TextAlignment.RIGHT);
-
-        //        document.Add(signature);
-        //        document.Add(signatureLine);
-
-        //        document.Add(new Paragraph("\n"));
-
-        //        // Add circular ESTD 2005 stamp on bottom right
-        //        // For a perfect circular stamp with text, you can create a custom Canvas or use an image.
-
-        //        // For simplicity, let's just add a styled text block mimicking a stamp:
-
-        //        var estdParagraph = new Paragraph("MAHALAKSHMI YUVAK MANDAL\nREGD.\nESTD. 2005")
-        //            .SetFontSize(10)
-        //            .SetTextAlignment(TextAlignment.CENTER)
-        //            .SetFontColor(orangeColor)
-        //            .SetBold();
-
-        //        var estdTable = new Table(1).SetFixedPosition(450, 50, 100).UseAllAvailableWidth();
-        //        estdTable.AddCell(new Cell().Add(estdParagraph).SetBorder(new SolidBorder(orangeColor, 2)).SetTextAlignment(TextAlignment.CENTER));
-        //        document.Add(estdTable);
-
-        //        // Close document
-        //        document.Close();
-
-        //        var bytes = ms.ToArray();
-
-        //        return File(bytes, "application/pdf", "UsersList.pdf");
-        //    }
-        //}
 
         [HttpGet("DownloadUsersPdf")]
         public async Task<IActionResult> DownloadUsersPdf()

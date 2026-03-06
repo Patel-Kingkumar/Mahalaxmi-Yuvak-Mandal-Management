@@ -1,4 +1,3 @@
-import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -15,7 +14,8 @@ import { CommonModule } from '@angular/common';
 import { CreateUserComponent } from './components/create-user/create-user.component';
 import { EditUserComponent } from './components/edit-user/edit-user.component';
 import { AdminListComponent } from './components/admin-list/admin-list.component';
-
+import { HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
+import { interceptorsInterceptor } from './intercepter/interceptors.interceptor';
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,7 +37,11 @@ import { AdminListComponent } from './components/admin-list/admin-list.component
     ReactiveFormsModule,
     CommonModule
   ],
-  providers: [],
+  providers: [
+    provideHttpClient(
+      withInterceptors([interceptorsInterceptor])
+    )
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

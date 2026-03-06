@@ -72,7 +72,6 @@ VALUES
 );
 
 
-SELECT U.FullName, U.Email, R.RoleName
-FROM Users U
-INNER JOIN Roles R ON U.RoleId = R.Id
-WHERE Email = 'kingpatel0409@gmail.com';
+
+[Authorize(Roles = "Admin")]
+[HttpGet("DownloadAdmnsPdf")]

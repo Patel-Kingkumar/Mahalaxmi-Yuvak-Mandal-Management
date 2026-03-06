@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -9,13 +9,17 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './admin-list.component.html',
   styleUrl: './admin-list.component.css'
 })
-export class AdminListComponent {
+export class AdminListComponent implements OnInit {
 
 
   users: any[] = [];
-
+  userRole: string = '';
   constructor(private userService: UserService, private authUserService: AuthService, private router: Router) {
     this.getUsers();
+  }
+
+  ngOnInit(): void {
+    this.userRole = sessionStorage.getItem('role') || '';
   }
 
   getUsers() {

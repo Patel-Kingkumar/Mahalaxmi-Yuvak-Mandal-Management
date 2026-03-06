@@ -1,0 +1,16 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "mahalaxmi_yuvak_mandal.client\\mahalaxmi_yuvak_mandal.client.esproj",
+        "Action": "Start",
+        "DebugTarget": "localhost (Chrome)"
+      },
+      {
+        "Path": "Mahalaxmi_Yuvak_Mandal.Server\\Mahalaxmi_Yuvak_Mandal.Server.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

@@ -7,6 +7,7 @@ import { ListUserComponent } from './components/list-user/list-user.component';
 import { CreateUserComponent } from './components/create-user/create-user.component';
 import { EditUserComponent } from './components/edit-user/edit-user.component';
 import { AdminListComponent } from './components/admin-list/admin-list.component';
+import { authGuard } from './guards/guards/auth.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -18,12 +19,26 @@ const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
+    canActivate: [authGuard],   // 👈 guard applied here
     children: [
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'create-user', component: CreateUserComponent },
-      { path: 'edit-user/:id', component: EditUserComponent },
+
+      {
+        path: 'create-user',
+        component: CreateUserComponent,
+        canActivate: [authGuard],
+        data: { roles: ['admin'] }
+      },
+
+      {
+        path: 'edit-user/:id',
+        component: EditUserComponent,
+        canActivate: [authGuard],
+        data: { roles: ['admin'] }
+      },
+
       { path: 'list-users', component: ListUserComponent },
-      { path: 'list-admins', component: AdminListComponent },
+      { path: 'list-admins', component: AdminListComponent }
     ]
   },
 
