@@ -11,6 +11,7 @@ using MimeKit;
 using MimeKit;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
 using System.Data;
 using System.Net.Mail;
 
@@ -309,10 +310,32 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> DownloadAdmnsPdf()
     {
         string connectionString = _config.GetConnectionString("DefaultConnection");
+
         using var con = new SqlConnection(connectionString);
-        var users = await con.QueryAsync<User>("sp_GetAdminsPdf", commandType: System.Data.CommandType.StoredProcedure);
+
+        // Get only Admin users
+        var users = await con.QueryAsync<User>(
+            "sp_GetAdminsPdf",
+            commandType: System.Data.CommandType.StoredProcedure
+        );
+
+        // Stamp image path
+        var stampPath = Path.Combine(
+            Directory.GetCurrentDirectory(),
+            "wwwroot",
+            "images",
+            "stamp.png"
+        );
+
+        byte[] stampImage = null;
+
+        if (System.IO.File.Exists(stampPath))
+        {
+            stampImage = System.IO.File.ReadAllBytes(stampPath);
+        }
 
         string mandalOrangeHex = "#F37335";
+        string mandalBlueHex = "#1F4E79";
 
         var pdfBytes = QuestPDF.Fluent.Document.Create(container =>
         {
@@ -321,7 +344,7 @@ public class AuthController : ControllerBase
                 page.Size(PageSizes.A4);
                 page.Margin(20);
 
-                // Header
+                // HEADER
                 page.Header()
                     .Background(mandalOrangeHex)
                     .Padding(10)
@@ -330,33 +353,31 @@ public class AuthController : ControllerBase
                     .FontSize(18)
                     .FontColor(Colors.White);
 
-                // Table with borders
+                // TABLE
                 page.Content().PaddingVertical(10).Table(table =>
                 {
                     table.ColumnsDefinition(columns =>
                     {
-                        columns.ConstantColumn(30);   // ID
-                        columns.RelativeColumn(3);   // Name
-                        columns.RelativeColumn(4);   // Email
-                        columns.RelativeColumn(2);   // Role
-                        columns.ConstantColumn(50);  // Active
-                        columns.RelativeColumn(3);   // Date
+                        columns.ConstantColumn(30);
+                        columns.RelativeColumn(3);
+                        columns.RelativeColumn(4);
+                        columns.RelativeColumn(2);
+                        columns.ConstantColumn(50);
+                        columns.RelativeColumn(3);
                     });
 
                     // Header row
                     table.Header(header =>
                     {
                         string[] headers = { "ID", "Full Name", "Email", "Role", "Active", "Date" };
+
                         foreach (var h in headers)
                         {
-                            string mandalOrangeHex = "#808080";
                             header.Cell()
                                   .Border(1)
                                   .BorderColor(Colors.Black)
                                   .Padding(5)
-                                  //.Background(mandalOrangeHex)   // ✅ Use custom orange
                                   .Text(h)
-                                  .FontColor(Colors.Black)    // white text on orange
                                   .SemiBold();
                         }
                     });
@@ -364,42 +385,52 @@ public class AuthController : ControllerBase
                     // Data rows
                     foreach (var user in users)
                     {
-                        table.Cell().Border(1).BorderColor(Colors.Black).Padding(5).Text(user.Id.ToString());
-                        table.Cell().Border(1).BorderColor(Colors.Black).Padding(5).Text(user.FullName);
-                        table.Cell().Border(1).BorderColor(Colors.Black).Padding(5).Text(user.Email);
-                        table.Cell().Border(1).BorderColor(Colors.Black).Padding(5).Text(user.Role ?? "N/A");
-                        table.Cell().Border(1).BorderColor(Colors.Black).Padding(5).Text(user.IsActive ? "Yes" : "No");
-                        table.Cell().Border(1).BorderColor(Colors.Black).Padding(5).Text(user.CreatedDate.ToString("dd-MM-yyyy"));
+                        table.Cell().Border(1).Padding(5).Text(user.Id.ToString());
+                        table.Cell().Border(1).Padding(5).Text(user.FullName);
+                        table.Cell().Border(1).Padding(5).Text(user.Email);
+                        table.Cell().Border(1).Padding(5).Text(user.Role ?? "N/A");
+                        table.Cell().Border(1).Padding(5).Text(user.IsActive ? "Yes" : "No");
+                        table.Cell().Border(1).Padding(5).Text(user.CreatedDate.ToString("dd-MM-yyyy"));
                     }
                 });
 
-                // Footer
-                page.Footer().Height(80).Row(row =>
+                // FOOTER
+                page.Footer().Height(100).Row(row =>
                 {
-                    string mandalBlueHex = "#1F4E79";
-                    // LEFT: Stamp Circle
-
                     var now = DateTime.Now;
-                    // RIGHT: Authorized signature + Date + ESTD
-                    row.RelativeColumn(2).AlignRight().AlignMiddle().Column(col =>
+                    string mandalBlueHex = "#1F4E79";
+
+                    // LEFT → Stamp
+                    if (stampImage != null)
                     {
-                        // Signature text
-                        col.Item().Text("Authorized Signature").Italic().FontSize(12);
-                        col.Item().Text("MYM").FontSize(20).FontColor(mandalOrangeHex).Italic();
+                        row.ConstantColumn(120)
+                           .Height(80)
+                           .AlignMiddle()
+                           .Image(stampImage, ImageScaling.FitArea);
+                    }
 
-                        // Date
-                        col.Item().Text($"Date: {now:dd-MMMM-yyyy}").FontSize(10);
-
-                        // ESTD 2005 in blue
-                        col.Item().Text("ESTD 2005").FontSize(10).FontColor(mandalBlueHex);
-                    });
+                    // RIGHT → Signature
+                    row.RelativeColumn()
+                       .AlignRight()
+                       .AlignMiddle()
+                       .Column(col =>
+                       {
+                           col.Item().Text("Authorized Signature").Italic().FontSize(12);
+                           col.Item().Text("MYM").FontSize(20).FontColor(mandalOrangeHex).Italic();
+                           col.Item().Text($"Date: {now:dd-MMMM-yyyy}").FontSize(10);
+                           col.Item().Text("ESTD 2005").FontSize(10).FontColor(mandalBlueHex);
+                       });
                 });
+
+
             });
         }).GeneratePdf();
+
         var now = DateTime.Now;
         var fileName = $"AdminList_{now:dd-MMMM-yyyy}.pdf";
 
         return File(pdfBytes, "application/pdf", fileName);
     }
+
 }
 
