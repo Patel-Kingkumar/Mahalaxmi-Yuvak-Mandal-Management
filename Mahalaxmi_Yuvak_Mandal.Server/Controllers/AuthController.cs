@@ -313,13 +313,28 @@ public class AuthController : ControllerBase
 
         using var con = new SqlConnection(connectionString);
 
-        // Get only Admin users
+        // Get Admin users
         var users = await con.QueryAsync<User>(
             "sp_GetAdminsPdf",
             commandType: System.Data.CommandType.StoredProcedure
         );
 
-        // Stamp image path
+        // HEADER IMAGE PATH
+        var headerPath = Path.Combine(
+            Directory.GetCurrentDirectory(),
+            "wwwroot",
+            "images",
+            "header.png"
+        );
+
+        byte[] headerImage = null;
+
+        if (System.IO.File.Exists(headerPath))
+        {
+            headerImage = System.IO.File.ReadAllBytes(headerPath);
+        }
+
+        // STAMP IMAGE PATH
         var stampPath = Path.Combine(
             Directory.GetCurrentDirectory(),
             "wwwroot",
@@ -344,16 +359,16 @@ public class AuthController : ControllerBase
                 page.Size(PageSizes.A4);
                 page.Margin(20);
 
-                // HEADER
-                page.Header()
-                    .Background(mandalOrangeHex)
-                    .Padding(10)
-                    .AlignCenter()
-                    .Text("Mahalakshmi Yuvak Mandal")
-                    .FontSize(18)
-                    .FontColor(Colors.White);
+                // HEADER IMAGE
+                page.Header().Height(150).Element(header =>
+                {
+                    if (headerImage != null)
+                    {
+                        header.Image(headerImage, ImageScaling.FitWidth);
+                    }
+                });
 
-                // TABLE
+                // CONTENT TABLE
                 page.Content().PaddingVertical(10).Table(table =>
                 {
                     table.ColumnsDefinition(columns =>
@@ -366,7 +381,7 @@ public class AuthController : ControllerBase
                         columns.RelativeColumn(3);
                     });
 
-                    // Header row
+                    // TABLE HEADER
                     table.Header(header =>
                     {
                         string[] headers = { "ID", "Full Name", "Email", "Role", "Active", "Date" };
@@ -374,15 +389,17 @@ public class AuthController : ControllerBase
                         foreach (var h in headers)
                         {
                             header.Cell()
-                                  .Border(1)
-                                  .BorderColor(Colors.Black)
-                                  .Padding(5)
-                                  .Text(h)
-                                  .SemiBold();
+                                .Border(1)
+                                .BorderColor(Colors.Black)
+                                .Padding(5)
+                                //.Background(mandalOrangeHex)
+                                .Text(h)
+                                .FontColor(Colors.Black)
+                                .SemiBold();
                         }
                     });
 
-                    // Data rows
+                    // TABLE DATA
                     foreach (var user in users)
                     {
                         table.Cell().Border(1).Padding(5).Text(user.Id.ToString());
@@ -398,30 +415,37 @@ public class AuthController : ControllerBase
                 page.Footer().Height(100).Row(row =>
                 {
                     var now = DateTime.Now;
-                    string mandalBlueHex = "#1F4E79";
 
-                    // LEFT → Stamp
+                    // LEFT SIDE STAMP
                     if (stampImage != null)
                     {
                         row.ConstantColumn(120)
-                           .Height(80)
-                           .AlignMiddle()
-                           .Image(stampImage, ImageScaling.FitArea);
+                            .Height(80)
+                            .AlignMiddle()
+                            .Image(stampImage, ImageScaling.FitArea);
                     }
 
-                    // RIGHT → Signature
+                    // RIGHT SIDE SIGNATURE
                     row.RelativeColumn()
-                       .AlignRight()
-                       .AlignMiddle()
-                       .Column(col =>
-                       {
-                           col.Item().Text("Authorized Signature").Italic().FontSize(12);
-                           col.Item().Text("MYM").FontSize(20).FontColor(mandalOrangeHex).Italic();
-                           col.Item().Text($"Date: {now:dd-MMMM-yyyy}").FontSize(10);
-                           col.Item().Text("ESTD 2005").FontSize(10).FontColor(mandalBlueHex);
-                       });
-                });
+                        .AlignRight()
+                        .AlignMiddle()
+                        .Column(col =>
+                        {
+                            col.Item().Text("Authorized Signature").Italic().FontSize(12);
 
+                            col.Item().Text("MYM")
+                                .FontSize(20)
+                                .FontColor(mandalOrangeHex)
+                                .Italic();
+
+                            col.Item().Text($"Date: {now:dd-MMMM-yyyy}")
+                                .FontSize(10);
+
+                            col.Item().Text("ESTD 2005")
+                                .FontSize(10)
+                                .FontColor(mandalBlueHex);
+                        });
+                });
 
             });
         }).GeneratePdf();
@@ -431,6 +455,7 @@ public class AuthController : ControllerBase
 
         return File(pdfBytes, "application/pdf", fileName);
     }
+
 
 }
 
