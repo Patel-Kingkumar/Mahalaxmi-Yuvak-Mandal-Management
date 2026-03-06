@@ -20,6 +20,7 @@ export class LoginComponent {
   showOTP = false;
   message = '';
 
+
   constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],

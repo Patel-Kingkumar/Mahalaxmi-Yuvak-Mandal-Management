@@ -16,6 +16,7 @@ import { EditUserComponent } from './components/edit-user/edit-user.component';
 import { AdminListComponent } from './components/admin-list/admin-list.component';
 import { HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { interceptorsInterceptor } from './intercepter/interceptors.interceptor';
+
 @NgModule({
   declarations: [
     AppComponent,
