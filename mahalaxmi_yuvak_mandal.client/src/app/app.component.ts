@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 
 interface WeatherForecast {
   date: string;
@@ -8,19 +8,27 @@ interface WeatherForecast {
   summary: string;
 }
 
+declare var $: any;
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   standalone: false,
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
   public forecasts: WeatherForecast[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   ngOnInit() {
     this.getForecasts();
+  }
+
+
+  ngAfterViewInit() {
+    console.log("fsduiufysdiufysdf suifysiudofysdiofuysfiousyfisuoyf suiof ysioufysfiuoys fiousyfiousy fsiuf ysiufy sfiuoy sf");
+
+    $('[data-widget="treeview"]').Treeview('init');
   }
 
   getForecasts() {
