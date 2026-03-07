@@ -10,6 +10,10 @@ import { AdminListComponent } from './components/admin-list/admin-list.component
 import { authGuard } from './guards/guards/auth.guard';
 import { CreateDonationComponent } from './components/create-donation/create-donation.component';
 import { ListDonationComponent } from './components/list-donation/list-donation.component';
+import { MatchDetailsComponent } from './components/match-details/match-details.component';
+import { EditMatchComponent } from './components/edit-match/edit-match.component';
+import { CreateMatchComponent } from './components/create-match/create-match.component';
+import { ListMatchComponent } from './components/list-match/list-match.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -46,7 +50,13 @@ const routes: Routes = [
       },
       { path: 'list-users', component: ListUserComponent },
       { path: 'list-admins', component: AdminListComponent },
-      { path: 'list-donation', component: ListDonationComponent }
+      { path: 'list-donation', component: ListDonationComponent },
+
+      // match moduel
+      { path: 'list-match', component: ListMatchComponent },
+      { path: 'create-match', component: CreateMatchComponent },
+      { path: 'edit-match/:id', component: EditMatchComponent },
+      { path: 'match-details/:id', component: MatchDetailsComponent },
     ]
   },
 

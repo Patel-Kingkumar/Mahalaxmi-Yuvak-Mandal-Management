@@ -1,0 +1,6 @@
+CREATE PROCEDURE sp_GetMatches
+AS
+BEGIN
+    SELECT * FROM Matches
+    ORDER BY MatchDate DESC
+END

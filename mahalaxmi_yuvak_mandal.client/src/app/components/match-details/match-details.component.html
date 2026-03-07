@@ -1,0 +1,50 @@
+<div class="container mt-4" *ngIf="match">
+  <h3>Match Details</h3>
+
+  <div class="card mt-3">
+    <div class="card-body">
+      <div class="row mb-3">
+        <div class="col-md-6"><strong>Team A :</strong> {{ match.TeamA }}</div>
+
+        <div class="col-md-6"><strong>Team B :</strong> {{ match.TeamB }}</div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <strong>Match Date :</strong>
+          {{ match.MatchDate | date: "dd-MM-yyyy" }}
+        </div>
+
+        <div class="col-md-6">
+          <strong>Ground :</strong>
+          {{ match.GroundName }}
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6"><strong>Overs :</strong> {{ match.Overs }}</div>
+
+        <div class="col-md-6">
+          <strong>Match Type :</strong> {{ match.MatchType }}
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <strong>Winner Team :</strong> {{ match.WinnerTeam }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-3">
+    <a routerLink="/list-match" class="btn btn-secondary">Back</a>
+
+    <a
+      class="btn btn-warning ms-2"
+      [routerLink]="['/edit-match', match.MatchId]"
+    >
+      Edit Match
+    </a>
+  </div>
+</div>

@@ -1,0 +1,70 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Match List</h3>
+
+    <a routerLink="/create-match" class="btn btn-primary"> Create Match </a>
+  </div>
+
+  <table class="table table-bordered table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th>#</th>
+        <th>Team A</th>
+        <th>Team B</th>
+        <th>Match Date</th>
+        <th>Ground</th>
+        <th>Overs</th>
+        <th>Match Type</th>
+        <th>Winner</th>
+        <th width="220">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let match of matches; let i = index">
+        <td>{{ i + 1 }}</td>
+
+        <td>{{ match.TeamA }}</td>
+
+        <td>{{ match.TeamB }}</td>
+
+        <td>{{ match.MatchDate | date: "dd-MM-yyyy" }}</td>
+
+        <td>{{ match.GroundName }}</td>
+
+        <td>{{ match.Overs }}</td>
+
+        <td>{{ match.MatchType }}</td>
+
+        <td>{{ match.WinnerTeam }}</td>
+
+        <td>
+          <a
+            class="btn btn-info btn-sm me-1"
+            [routerLink]="['/match-details', match.MatchId]"
+          >
+            View
+          </a>
+
+          <a
+            class="btn btn-warning btn-sm me-1"
+            [routerLink]="['/edit-match', match.MatchId]"
+          >
+            Edit
+          </a>
+
+          <button
+            class="btn btn-danger btn-sm"
+            (click)="deleteMatch(match.MatchId)"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+
+      <tr *ngIf="matches.length == 0">
+        <td colspan="9" class="text-center">No Matches Found</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

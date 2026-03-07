@@ -1,0 +1,49 @@
+<div class="container mt-4">
+  <h3>Create Match</h3>
+
+  <form [formGroup]="matchForm" (ngSubmit)="createMatch()">
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label>Match Date</label>
+        <input type="date" class="form-control" formControlName="matchDate" />
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label>Ground Name</label>
+        <input type="text" class="form-control" formControlName="groundName" />
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label>Team A</label>
+        <input type="text" class="form-control" formControlName="teamA" />
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label>Team B</label>
+        <input type="text" class="form-control" formControlName="teamB" />
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label>Overs</label>
+        <input type="number" class="form-control" formControlName="overs" />
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label>Match Type</label>
+        <select class="form-control" formControlName="matchType">
+          <option value="">Select</option>
+          <option value="T20">T20</option>
+          <option value="ODI">ODI</option>
+          <option value="Test">Test</option>
+        </select>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label>Winner Team</label>
+        <input type="text" class="form-control" formControlName="winnerTeam" />
+      </div>
+    </div>
+
+    <button class="btn btn-success">Create Match</button>
+  </form>
+</div>

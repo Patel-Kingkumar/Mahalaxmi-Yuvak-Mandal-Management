@@ -4,10 +4,12 @@ export const API_ENDPOINTS = {
     GET_ALL: 'GetAllUsers',
     DOWNLOAD_PDF: 'DownloadUsersPdf'
   },
+
   AUTH: {
     BASE: 'Auth',
     DOWNLOAD_PDF: 'DownloadAdmnsPdf'
   },
+
   DONATIONS: {
     BASE: 'Donation',
     CREATE: 'create-donation',
@@ -15,6 +17,14 @@ export const API_ENDPOINTS = {
     GET_BY_ID: 'get-donation',
     UPDATE: 'update-donation',
     DELETE: 'delete-donation'
-  }
+  },
 
+  MATCHES: {
+    BASE: 'Match',
+    CREATE: 'create-match',
+    GET_ALL: 'get-matches',
+    GET_BY_ID: 'get-match',
+    UPDATE: 'update-match',
+    DELETE: 'delete-match'
+  }
 };

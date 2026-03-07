@@ -1,0 +1,49 @@
+<div class="container mt-4">
+  <h3>Edit Match</h3>
+
+  <form [formGroup]="matchForm" (ngSubmit)="updateMatch()">
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label>Team A</label>
+        <input type="text" class="form-control" formControlName="TeamA" />
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label>Team B</label>
+        <input type="text" class="form-control" formControlName="TeamB" />
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label>Match Date</label>
+        <input type="date" class="form-control" formControlName="MatchDate" />
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label>Ground Name</label>
+        <input type="text" class="form-control" formControlName="GroundName" />
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label>Overs</label>
+        <input type="number" class="form-control" formControlName="Overs" />
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label>Match Type</label>
+        <select class="form-control" formControlName="MatchType">
+          <option value="T20">T20</option>
+          <option value="ODI">ODI</option>
+          <option value="Test">Test</option>
+        </select>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label>Winner Team</label>
+        <input type="text" class="form-control" formControlName="WinnerTeam" />
+      </div>
+    </div>
+
+    <button class="btn btn-success">Update Match</button>
+    <a routerLink="/list-match" class="btn btn-secondary ms-2">Cancel</a>
+  </form>
+</div>

@@ -18,6 +18,10 @@ import { HttpClientModule, provideHttpClient, withInterceptors } from '@angular/
 import { interceptorsInterceptor } from './intercepter/interceptors.interceptor';
 import { CreateDonationComponent } from './components/create-donation/create-donation.component';
 import { ListDonationComponent } from './components/list-donation/list-donation.component';
+import { ListMatchComponent } from './components/list-match/list-match.component';
+import { CreateMatchComponent } from './components/create-match/create-match.component';
+import { EditMatchComponent } from './components/edit-match/edit-match.component';
+import { MatchDetailsComponent } from './components/match-details/match-details.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +36,11 @@ import { ListDonationComponent } from './components/list-donation/list-donation.
     EditUserComponent,
     AdminListComponent,
     CreateDonationComponent,
-    ListDonationComponent
+    ListDonationComponent,
+    ListMatchComponent,
+    CreateMatchComponent,
+    EditMatchComponent,
+    MatchDetailsComponent
   ],
   imports: [
     BrowserModule,
