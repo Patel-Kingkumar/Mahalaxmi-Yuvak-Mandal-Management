@@ -455,24 +455,23 @@ public class AuthController : ControllerBase
 
                     // RIGHT SIDE SIGNATURE
                     row.RelativeColumn()
-                        .AlignRight()
-                        .AlignMiddle()
-                        .Column(col =>
-                        {
-                            col.Item().Text("Authorized Signature").Italic().FontSize(12);
+                            .AlignRight()
+                            .AlignMiddle()
+                            .Column(col =>
+                            {
+                                col.Item().Text("Authorized Signature").Italic().FontSize(12);
 
-                            col.Item().Text("MYM")
-                                .FontSize(20)
-                                .FontColor(mandalOrangeHex)
-                                .Italic();
+                                col.Item().Text("𝓜𝓪𝓱𝓪𝓵𝓪𝔁𝓶𝓲 𝓨𝓾𝓿𝓪𝓵 𝓜𝓪𝓷𝓭𝓪𝓵")
+                                    .FontSize(10)
+                                    .FontColor(mandalOrangeHex)
+                                    .Italic();
+                                col.Item().Text("ESTD 2005")
+                                    .FontSize(10)
+                                    .FontColor(mandalBlueHex);
 
-                            col.Item().Text($"Date: {now:dd-MMMM-yyyy}")
-                                .FontSize(10);
-
-                            col.Item().Text("ESTD 2005")
-                                .FontSize(10)
-                                .FontColor(mandalBlueHex);
-                        });
+                                col.Item().PaddingTop(10).Text($"Date: {now:dd-MMMM-yyyy hh:mm tt}")
+                                    .FontSize(10);
+                            });
                 });
 
             });
