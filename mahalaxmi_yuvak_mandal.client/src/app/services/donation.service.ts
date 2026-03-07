@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environment';
 import { API_ENDPOINTS } from '../core/api-endpoints';
@@ -58,11 +58,20 @@ export class DonationService {
     );
   }
 
-  downloadDonationReport(): Observable<Blob> {
+  downloadDonationReport(userId: number, role: string): Observable<Blob> {
+    // 1. Create the query parameters (?userId=1&role=Admin)
+    const params = new HttpParams()
+      .set('userId', userId.toString())
+      .set('role', role);
+
     return this.http.get(
       `${this.baseUrl}/${API_ENDPOINTS.DONATIONS.BASE}/${API_ENDPOINTS.DONATIONS.DOWNLOAD_PDF}`,
-      { responseType: 'blob' } // Critical for PDF files
+      {
+        params: params,        // Send the parameters
+        responseType: 'blob'   // Keep this for PDF
+      }
     );
   }
+
 
 }

@@ -63,7 +63,15 @@ export class ListDonationComponent implements OnInit {
   }
 
   downloadPdfReport() {
-    this.donationService.downloadDonationReport().subscribe({
+    const userId = Number(sessionStorage.getItem('userId'));
+    const role = sessionStorage.getItem('role') || 'User';
+
+    if (!userId) {
+      alert("Session expired. Please login again.");
+      return;
+    }
+
+    this.donationService.downloadDonationReport(userId, role).subscribe({
       next: (data: Blob) => {
         // Create a local URL for the binary data
         const blob = new Blob([data], { type: 'application/pdf' });

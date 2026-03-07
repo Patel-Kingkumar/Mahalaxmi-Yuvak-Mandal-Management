@@ -18,7 +18,7 @@ BEGIN
     ORDER BY d.DonationDate DESC;  
 END  
   
-ALTER PROCEDURE sp_GetDonationReport  
+ALTER PROCEDURE sp_GetDonationReport
     @UserId INT,      -- logged-in user ID
     @RoleId INT       -- logged-in user role ID
 AS  
@@ -37,6 +37,6 @@ BEGIN
     INNER JOIN Users u ON d.UserId = u.Id    
     INNER JOIN Roles r ON u.RoleId = r.Id
     INNER JOIN Celebrations c ON d.CelebrationId = c.Id    
-    WHERE (@RoleId = 1 OR d.UserId = @UserId)   -- RoleId 1 → Admin sees all, else only own
+    WHERE (@RoleId = 1 OR d.UserId = @UserId)   -- Admin sees all, else only own
     ORDER BY d.DonationDate DESC;  
 END

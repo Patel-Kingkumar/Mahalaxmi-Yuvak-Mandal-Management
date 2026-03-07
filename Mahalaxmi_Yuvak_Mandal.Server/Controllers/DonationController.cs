@@ -137,36 +137,36 @@ namespace Mahalaxmi_Yuvak_Mandal.Server.Controllers
         }
 
         [HttpGet("DownloadDonationReport")]
-        public async Task<IActionResult> DownloadDonationReport()
+        public async Task<IActionResult> DownloadDonationReport([FromQuery] int userId, [FromQuery] string role)
         {
+            // 1. Database Connection
             string connectionString = _configuration.GetConnectionString("DefaultConnection");
-
             using var con = new SqlConnection(connectionString);
 
-            // 1️⃣ Get logged-in user's info
-            string userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            int? userId = !string.IsNullOrEmpty(userIdClaim) ? Convert.ToInt32(userIdClaim) : (int?)null;
+            // If role is Admin, we pass NULL to the SP to get everything
+            // If role is User, we pass the actual userId
+            bool isAdmin = role.Equals("Admin", StringComparison.OrdinalIgnoreCase);
 
-            string roleClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "role")?.Value ?? "User";
-
-            // 2️⃣ Call SP: Admin → all records, User → specific user
             var donations = await con.QueryAsync<DonationList>(
                 "sp_GetDonationReport",
-                new { UserId = roleClaim == "Admin" ? (int?)null : userId },
+                new { UserId = isAdmin ? (int?)null : userId },
                 commandType: CommandType.StoredProcedure
             );
 
-            // 3️⃣ Load header & stamp images
+            if (donations == null || !donations.Any())
+                return NotFound("No donations found for the report.");
+
+            // 3. Fetch Data
+            
+
+            // 4. Asset Loading
             var headerPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "header.png");
-            byte[] headerImage = System.IO.File.Exists(headerPath) ? System.IO.File.ReadAllBytes(headerPath) : null;
+            byte[]? headerImage = System.IO.File.Exists(headerPath) ? System.IO.File.ReadAllBytes(headerPath) : null;
 
             var stampPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "stamp.png");
-            byte[] stampImage = System.IO.File.Exists(stampPath) ? System.IO.File.ReadAllBytes(stampPath) : null;
+            byte[]? stampImage = System.IO.File.Exists(stampPath) ? System.IO.File.ReadAllBytes(stampPath) : null;
 
-            string mandalOrangeHex = "#F37335";
-            string mandalBlueHex = "#1F4E79";
-
-            // 4️⃣ Generate PDF
+            // 5. Generate PDF
             var pdfBytes = QuestPDF.Fluent.Document.Create(container =>
             {
                 container.Page(page =>
@@ -174,79 +174,62 @@ namespace Mahalaxmi_Yuvak_Mandal.Server.Controllers
                     page.Size(PageSizes.A4);
                     page.Margin(20);
 
-                    // HEADER IMAGE
-                    page.Header().Height(150).Element(header =>
-                    {
+                    // FIX: Removed .Height(100). Let the image define the height.
+                    page.Header().Element(h => {
                         if (headerImage != null)
-                            header.Image(headerImage, ImageScaling.FitWidth);
+                            h.Image(headerImage, ImageScaling.FitWidth);
                     });
 
-                    // TABLE CONTENT
                     page.Content().PaddingVertical(10).Table(table =>
                     {
-                        // ⚡ Define 6 columns (must match header/data)
                         table.ColumnsDefinition(columns =>
                         {
-                            columns.ConstantColumn(40);   // ID
-                            columns.RelativeColumn(2);    // User
-                            columns.RelativeColumn(2);    // Celebration
-                            columns.ConstantColumn(80);   // Amount
-                            columns.ConstantColumn(60);   // Year
-                            columns.RelativeColumn(2);    // Date
+                            columns.ConstantColumn(40);
+                            columns.RelativeColumn(2);
+                            columns.RelativeColumn(2);
+                            columns.ConstantColumn(80);
+                            columns.ConstantColumn(60);
+                            columns.RelativeColumn(2);
                         });
 
-                        // TABLE HEADER
                         table.Header(header =>
                         {
-                            string[] headers = { "ID", "User", "Celebration", "Amount", "Year", "Date" };
-                            foreach (var h in headers)
-                                header.Cell().Border(1).Padding(5).Text(h).SemiBold();
+                            string[] titles = { "ID", "User", "Celebration", "Amount", "Year", "Date" };
+                            foreach (var title in titles)
+                                header.Cell().Border(1).Padding(5).Text(title).SemiBold();
                         });
 
-                        // TABLE DATA
                         foreach (var d in donations)
                         {
-                            // Explicitly cast dynamic properties
-                            int donationId = Convert.ToInt32(d.DonationId);
-                            string fullName = Convert.ToString(d.FullName);
-                            string celebrationName = Convert.ToString(d.CelebrationName);
-                            decimal amount = Convert.ToDecimal(d.Amount);
-                            int year = Convert.ToInt32(d.Year);
-                            DateTime donationDate = Convert.ToDateTime(d.DonationDate);
-
-                            table.Cell().Border(1).Padding(5).Text(donationId.ToString());
-                            table.Cell().Border(1).Padding(5).Text(fullName);
-                            table.Cell().Border(1).Padding(5).Text(celebrationName);
-                            table.Cell().Border(1).Padding(5).Text($"₹ {amount}");
-                            table.Cell().Border(1).Padding(5).Text(year.ToString());
-                            table.Cell().Border(1).Padding(5).Text(donationDate.ToString("dd-MMM-yyyy"));
+                            table.Cell().Border(1).Padding(5).Text(d.DonationId.ToString());
+                            table.Cell().Border(1).Padding(5).Text(d.FullName ?? "");
+                            table.Cell().Border(1).Padding(5).Text(d.CelebrationName ?? "");
+                            table.Cell().Border(1).Padding(5).Text($"₹ {d.Amount}");
+                            table.Cell().Border(1).Padding(5).Text(d.Year.ToString());
+                            table.Cell().Border(1).Padding(5).Text(d.DonationDate.ToString("dd-MMM-yyyy"));
                         }
                     });
 
-                    // FOOTER
-                    page.Footer().Height(100).Row(row =>
+                    // FIX: Removed .Height(80) to prevent layout conflicts
+                    page.Footer().PaddingTop(10).Row(row =>
                     {
-                        var now = DateTime.Now;
-
                         if (stampImage != null)
-                            row.ConstantColumn(120).Height(80).AlignMiddle().Image(stampImage, ImageScaling.FitArea);
+                            row.ConstantColumn(100).Image(stampImage, ImageScaling.FitArea);
 
-                        row.RelativeColumn().AlignRight().AlignMiddle().Column(col =>
+                        row.RelativeColumn().AlignRight().Column(col =>
                         {
-                            col.Item().Text("Authorized Signature").Italic().FontSize(12);
-                            col.Item().Text("𝓜𝓪𝓱𝓪𝓵𝓪𝔁𝓶𝓲 𝓨𝓾𝓿𝓪𝓴 𝓜𝓪𝓷𝓭𝓪𝓵")
-                                .FontSize(10).FontColor(mandalOrangeHex).Italic();
-                            col.Item().Text("ESTD 2005").FontSize(10).FontColor(mandalBlueHex);
-                            col.Item().PaddingTop(10).Text($"Date: {now:dd-MMMM-yyyy hh:mm tt}").FontSize(10);
+                            col.Item().Text("Authorized Signature").Italic();
+                            col.Item().Text("Mahalaxmi Yuvak Mandal").FontSize(10).SemiBold();
+                            col.Item().Text($"Generated: {DateTime.Now:dd-MMM-yyyy hh:mm tt}").FontSize(9);
                         });
                     });
                 });
             }).GeneratePdf();
 
-            var fileName = $"DonationReport_{DateTime.Now:dd-MMMM-yyyy}.pdf";
-
-            return File(pdfBytes, "application/pdf", fileName);
+            return File(pdfBytes, "application/pdf", $"DonationReport_{DateTime.Now:yyyyMMdd}.pdf");
         }
+
+
     }
 }
 
