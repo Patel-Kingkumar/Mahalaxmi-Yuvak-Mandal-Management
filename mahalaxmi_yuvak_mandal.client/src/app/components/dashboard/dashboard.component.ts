@@ -27,7 +27,6 @@ export class DashboardComponent {
   getUsers() {
     this.userService.getAllUsers().subscribe(users => {
       this.users = users;
-      console.log("users:", this.users);
 
       // Prepare data
       const roles = this.users.map(u => u.role);

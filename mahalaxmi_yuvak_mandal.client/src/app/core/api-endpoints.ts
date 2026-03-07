@@ -16,7 +16,8 @@ export const API_ENDPOINTS = {
     GET_ALL: 'get-donations',
     GET_BY_ID: 'get-donation',
     UPDATE: 'update-donation',
-    DELETE: 'delete-donation'
+    DELETE: 'delete-donation',
+    DOWNLOAD_PDF: 'DownloadDonationReport'
   },
 
   MATCHES: {

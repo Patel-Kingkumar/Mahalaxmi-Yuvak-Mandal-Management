@@ -58,4 +58,11 @@ export class DonationService {
     );
   }
 
+  downloadDonationReport(): Observable<Blob> {
+    return this.http.get(
+      `${this.baseUrl}/${API_ENDPOINTS.DONATIONS.BASE}/${API_ENDPOINTS.DONATIONS.DOWNLOAD_PDF}`,
+      { responseType: 'blob' } // Critical for PDF files
+    );
+  }
+
 }

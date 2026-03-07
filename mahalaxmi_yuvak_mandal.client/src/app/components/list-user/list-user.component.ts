@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-list-user',
@@ -12,7 +13,7 @@ export class ListUserComponent implements OnInit {
 
   users: any[] = [];
   userRole: string = '';
-  constructor(private userService: UserService, private router: Router) {
+  constructor(private userService: UserService, private router: Router, private toastr: ToastrService) {
     this.getUsers();
   }
 
@@ -56,7 +57,8 @@ export class ListUserComponent implements OnInit {
 
     this.userService.deleteUser(id).subscribe({
       next: () => {
-        alert("User deleted successfully");
+        this.toastr.success('User deleted successfully');
+
 
         // refresh list
         this.getUsers();

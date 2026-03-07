@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatchService } from '../../services/match.service';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-create-match',
@@ -16,7 +17,8 @@ export class CreateMatchComponent {
   constructor(
     private fb: FormBuilder,
     private matchService: MatchService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -43,7 +45,7 @@ export class CreateMatchComponent {
     this.matchService.createMatch(this.matchForm.value).subscribe({
 
       next: () => {
-        alert('Match Created Successfully');
+        this.toastr.success('Match Created Successfully');
         this.router.navigate(['/list-match']);
       },
 

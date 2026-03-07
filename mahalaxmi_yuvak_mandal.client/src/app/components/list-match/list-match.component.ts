@@ -20,7 +20,6 @@ export class ListMatchComponent {
   getMatches() {
     this.matchService.getAllMatches().subscribe((res: any) => {
       this.matches = res;
-      console.log("matches : ", this.matches);
     });
   }
 

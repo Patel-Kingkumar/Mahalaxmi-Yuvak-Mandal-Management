@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-edit-user',
@@ -20,7 +21,8 @@ export class EditUserComponent {
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -64,11 +66,11 @@ export class EditUserComponent {
     this.userService.updateUser(this.userId, formData)
       .subscribe({
         next: () => {
-          alert("User updated successfully");
+          this.toastr.success('User updated successfully');
           this.router.navigate(['/list-users']);
         },
         error: (err) => {
-          console.log(err);
+          this.toastr.error('Error updating user');
         }
       });
 

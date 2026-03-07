@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'; // ✅ Add this
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +22,7 @@ export class LoginComponent {
   message = '';
 
 
-  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
+  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router, private toastr: ToastrService) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
@@ -51,11 +52,16 @@ export class LoginComponent {
 
         // ✅ Store user role
         sessionStorage.setItem('role', res.role);
+        this.toastr.success('Login successful!');
+        this.toastr.info('Saved!', '', {
+          positionClass: 'toast-bottom-right'
+        });
         this.message = 'Login successful!';
         this.router.navigate(['/dashboard']);   // ✅ Redirect here
       },
       error: err => {
         this.message = 'Invalid credentials or role.';
+        this.toastr.error('Invalid credentials or role.');
       }
     });
   }

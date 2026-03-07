@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-admin-list',
@@ -14,7 +15,12 @@ export class AdminListComponent implements OnInit {
 
   users: any[] = [];
   userRole: string = '';
-  constructor(private userService: UserService, private authUserService: AuthService, private router: Router) {
+  constructor(
+    private userService: UserService,
+    private authUserService: AuthService,
+    private router: Router,
+    private toastr: ToastrService
+  ) {
     this.getUsers();
   }
 
@@ -59,13 +65,13 @@ export class AdminListComponent implements OnInit {
 
     this.userService.deleteUser(id).subscribe({
       next: () => {
-        alert("User deleted successfully");
+        this.toastr.success('User deleted successfully');
 
         // refresh list
         this.getUsers();
       },
       error: (err) => {
-        alert(err.error);
+        this.toastr.error('Error deleting user');
       }
     });
 

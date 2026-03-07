@@ -22,6 +22,8 @@ import { ListMatchComponent } from './components/list-match/list-match.component
 import { CreateMatchComponent } from './components/create-match/create-match.component';
 import { EditMatchComponent } from './components/edit-match/edit-match.component';
 import { MatchDetailsComponent } from './components/match-details/match-details.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -48,7 +50,17 @@ import { MatchDetailsComponent } from './components/match-details/match-details.
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    CommonModule
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
+    CommonModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-top-right', // 👈 top right position
+      timeOut: 3000,
+      closeButton: true,
+      progressBar: true
+    })
+
+
   ],
   providers: [
     provideHttpClient(
@@ -56,5 +68,7 @@ import { MatchDetailsComponent } from './components/match-details/match-details.
     )
   ],
   bootstrap: [AppComponent]
+
+
 })
 export class AppModule { }

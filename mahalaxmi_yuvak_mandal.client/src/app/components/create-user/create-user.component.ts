@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../../services/user.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-create-user',
@@ -16,7 +17,8 @@ export class CreateUserComponent {
 
   constructor(
     private fb: FormBuilder,
-    private userService: UserService
+    private userService: UserService,
+    private toastr: ToastrService
   ) {
     this.initForm();
   }
@@ -41,15 +43,17 @@ export class CreateUserComponent {
     this.userService.createUser(this.createUserForm.value)
       .subscribe({
         next: (res) => {
-          alert(res.message);
+          this.toastr.success('User created successfully');
           this.createUserForm.reset({ role: 'User', isActive: true });
 
         },
         error: (err) => {
-          alert(err.error);
+          this.toastr.error('Error creating user');
         }
       });
 
   }
 
 }
+
+

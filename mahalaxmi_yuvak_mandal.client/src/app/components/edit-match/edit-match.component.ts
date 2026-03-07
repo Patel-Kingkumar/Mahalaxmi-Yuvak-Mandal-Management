@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatchService } from '../../services/match.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-edit-match',
@@ -18,7 +19,8 @@ export class EditMatchComponent {
     private fb: FormBuilder,
     private matchService: MatchService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -66,7 +68,7 @@ export class EditMatchComponent {
     this.matchService.updateMatch(this.matchId, this.matchForm.value).subscribe({
 
       next: () => {
-        alert('Match Updated Successfully');
+        this.toastr.success('Match Updated Successfully');
         this.router.navigate(['/list-match']);
       },
 
@@ -77,5 +79,6 @@ export class EditMatchComponent {
     });
 
   }
+
 
 }
