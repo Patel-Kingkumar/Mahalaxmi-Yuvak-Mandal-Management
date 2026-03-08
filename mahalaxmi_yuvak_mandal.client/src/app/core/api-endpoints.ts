@@ -39,6 +39,10 @@ export const API_ENDPOINTS = {
     BASE: 'MatchScore',
     CREATE: 'create-score',
     GET_BY_MATCH: 'get-scores'
-  }
+  },
 
+  DASHBOARD: {
+    BASE: 'dashboard',
+    GET_STATS: 'dashboard'
+  },
 };

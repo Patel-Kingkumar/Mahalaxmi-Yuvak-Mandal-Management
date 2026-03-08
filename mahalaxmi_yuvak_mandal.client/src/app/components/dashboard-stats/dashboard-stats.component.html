@@ -1,0 +1,50 @@
+<div class="content-wrapper">
+  <section class="content-header">
+    <h1>Dashboard Stats</h1>
+  </section>
+
+  <section class="content">
+    <div class="row">
+      <!-- Total Matches -->
+      <div class="col-lg-3 col-6">
+        <div class="small-box bg-info">
+          <div class="inner">
+            <h3>{{ stats?.totalMatches }}</h3>
+            <p>Total Matches</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-trophy"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Highest Run Scorer -->
+      <div class="col-lg-3 col-6">
+        <div class="small-box bg-success">
+          <div class="inner">
+            <h3>{{ stats?.totalRuns }}</h3>
+            <p>Highest Run Scorer</p>
+            <strong>{{ stats?.highestRunScorer }}</strong>
+          </div>
+          <div class="icon">
+            <i class="fas fa-baseball-ball"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Most Wickets -->
+      <div class="col-lg-3 col-6">
+        <div class="small-box bg-warning">
+          <div class="inner">
+            <h3>{{ stats?.totalWickets }}</h3>
+            <p>Most Wickets</p>
+            <strong>{{ stats?.mostWicketsPlayer }}</strong>
+          </div>
+          <div class="icon">
+            <i class="fas fa-bullseye"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

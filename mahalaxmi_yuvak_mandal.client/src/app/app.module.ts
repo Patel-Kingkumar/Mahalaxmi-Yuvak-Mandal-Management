@@ -26,6 +26,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { CreatePlayerStatsComponent } from './components/create-player-stats/create-player-stats.component';
 import { ListPlayerStatsComponent } from './components/list-player-stats/list-player-stats.component';
+import { DashboardStatsComponent } from './components/dashboard-stats/dashboard-stats.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { ListPlayerStatsComponent } from './components/list-player-stats/list-pl
     EditMatchComponent,
     MatchDetailsComponent,
     CreatePlayerStatsComponent,
-    ListPlayerStatsComponent
+    ListPlayerStatsComponent,
+    DashboardStatsComponent
   ],
   imports: [
     BrowserModule,

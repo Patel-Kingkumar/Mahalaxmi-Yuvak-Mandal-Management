@@ -16,6 +16,7 @@ import { CreateMatchComponent } from './components/create-match/create-match.com
 import { ListMatchComponent } from './components/list-match/list-match.component';
 import { CreatePlayerStatsComponent } from './components/create-player-stats/create-player-stats.component';
 import { ListPlayerStatsComponent } from './components/list-player-stats/list-player-stats.component';
+import { DashboardStatsComponent } from './components/dashboard-stats/dashboard-stats.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -67,7 +68,9 @@ const routes: Routes = [
       {
         path: 'list-player-stats',
         component: ListPlayerStatsComponent
-      }
+      },
+
+      { path: 'dashboard-stats', component: DashboardStatsComponent }
 
     ]
   },
