@@ -1,45 +1,44 @@
 CREATE PROCEDURE sp_InsertPlayerStats
 (
     @MatchId INT,
-    @PlayerName VARCHAR(200),
+    @PlayerName VARCHAR(100),
     @TeamName VARCHAR(100),
-    @RunsScored INT,
-    @BallsPlayed INT,
+    @Runs INT,
+    @BallsFaced INT,
     @Fours INT,
     @Sixes INT,
-    @WicketsTaken INT,
     @OversBowled DECIMAL(4,1),
-    @RunsGiven INT,
-    @Catches INT
+    @RunsConceded INT,
+    @Wickets INT
 )
 AS
 BEGIN
-    INSERT INTO PlayerStats
-    (
-        MatchId,
-        PlayerName,
-        TeamName,
-        RunsScored,
-        BallsPlayed,
-        Fours,
-        Sixes,
-        WicketsTaken,
-        OversBowled,
-        RunsGiven,
-        Catches
-    )
-    VALUES
-    (
-        @MatchId,
-        @PlayerName,
-        @TeamName,
-        @RunsScored,
-        @BallsPlayed,
-        @Fours,
-        @Sixes,
-        @WicketsTaken,
-        @OversBowled,
-        @RunsGiven,
-        @Catches
-    )
+
+INSERT INTO PlayerStats
+(
+MatchId,
+PlayerName,
+TeamName,
+Runs,
+BallsFaced,
+Fours,
+Sixes,
+OversBowled,
+RunsConceded,
+Wickets
+)
+VALUES
+(
+@MatchId,
+@PlayerName,
+@TeamName,
+@Runs,
+@BallsFaced,
+@Fours,
+@Sixes,
+@OversBowled,
+@RunsConceded,
+@Wickets
+)
+
 END

@@ -34,6 +34,19 @@ export class MatchService {
     );
   }
 
+  getScores(matchId: number) {
+    return this.http.get<any>(
+      `${this.baseUrl}/${API_ENDPOINTS.MATCH_SCORE.BASE}/${API_ENDPOINTS.MATCH_SCORE.GET_BY_MATCH}/${matchId}`
+    );
+  }
+
+  createScore(data: any) {
+    return this.http.post<any>(
+      `${this.baseUrl}/${API_ENDPOINTS.MATCH_SCORE.BASE}/${API_ENDPOINTS.MATCH_SCORE.CREATE}`,
+      data
+    );
+  }
+
   // Update Match
   updateMatch(id: number, data: any) {
     return this.http.put(

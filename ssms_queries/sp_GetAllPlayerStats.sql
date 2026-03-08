@@ -1,0 +1,9 @@
+CREATE PROCEDURE sp_GetAllPlayerStats
+AS
+BEGIN
+
+SELECT *
+FROM PlayerStats
+ORDER BY PlayerStatId DESC
+
+END

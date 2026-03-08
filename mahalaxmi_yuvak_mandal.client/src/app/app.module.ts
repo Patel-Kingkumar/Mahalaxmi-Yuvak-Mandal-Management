@@ -24,6 +24,8 @@ import { EditMatchComponent } from './components/edit-match/edit-match.component
 import { MatchDetailsComponent } from './components/match-details/match-details.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { CreatePlayerStatsComponent } from './components/create-player-stats/create-player-stats.component';
+import { ListPlayerStatsComponent } from './components/list-player-stats/list-player-stats.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,9 @@ import { ToastrModule } from 'ngx-toastr';
     ListMatchComponent,
     CreateMatchComponent,
     EditMatchComponent,
-    MatchDetailsComponent
+    MatchDetailsComponent,
+    CreatePlayerStatsComponent,
+    ListPlayerStatsComponent
   ],
   imports: [
     BrowserModule,

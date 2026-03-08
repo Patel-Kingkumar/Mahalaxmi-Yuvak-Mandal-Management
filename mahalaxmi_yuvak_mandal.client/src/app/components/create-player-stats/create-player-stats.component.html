@@ -1,0 +1,76 @@
+<form [formGroup]="statsForm">
+  <div class="card card-primary">
+    <div class="card-header">
+      <h3 class="card-title">Create Player Stats</h3>
+    </div>
+
+    <div class="card-body">
+      <div class="form-group">
+        <label>Match Id</label>
+        <input type="number" class="form-control" formControlName="matchId" />
+      </div>
+
+      <div class="form-group">
+        <label>Player Name</label>
+        <input type="text" class="form-control" formControlName="playerName" />
+      </div>
+
+      <div class="form-group">
+        <label>Team Name</label>
+        <input type="text" class="form-control" formControlName="teamName" />
+      </div>
+
+      <div class="form-group">
+        <label>Runs</label>
+        <input type="number" class="form-control" formControlName="runs" />
+      </div>
+
+      <div class="form-group">
+        <label>Balls Faced</label>
+        <input
+          type="number"
+          class="form-control"
+          formControlName="ballsFaced"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Fours</label>
+        <input type="number" class="form-control" formControlName="fours" />
+      </div>
+
+      <div class="form-group">
+        <label>Sixes</label>
+        <input type="number" class="form-control" formControlName="sixes" />
+      </div>
+
+      <div class="form-group">
+        <label>Overs Bowled</label>
+        <input
+          type="number"
+          step="0.1"
+          class="form-control"
+          formControlName="oversBowled"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Runs Conceded</label>
+        <input
+          type="number"
+          class="form-control"
+          formControlName="runsConceded"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Wickets</label>
+        <input type="number" class="form-control" formControlName="wickets" />
+      </div>
+    </div>
+
+    <div class="card-footer">
+      <button class="btn btn-primary" (click)="saveStats()">Save</button>
+    </div>
+  </div>
+</form>

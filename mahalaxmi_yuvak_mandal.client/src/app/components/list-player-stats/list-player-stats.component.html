@@ -1,0 +1,37 @@
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Player Stats List</h3>
+  </div>
+
+  <div class="card-body">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Player</th>
+          <th>Team</th>
+          <th>Runs</th>
+          <th>Balls</th>
+          <th>4s</th>
+          <th>6s</th>
+          <th>Overs</th>
+          <th>Runs Given</th>
+          <th>Wickets</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let s of stats">
+          <td>{{ s.playerName }}</td>
+          <td>{{ s.teamName }}</td>
+          <td>{{ s.runs }}</td>
+          <td>{{ s.ballsFaced }}</td>
+          <td>{{ s.fours }}</td>
+          <td>{{ s.sixes }}</td>
+          <td>{{ s.oversBowled }}</td>
+          <td>{{ s.runsConceded }}</td>
+          <td>{{ s.wickets }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -27,5 +27,18 @@ export const API_ENDPOINTS = {
     GET_BY_ID: 'get-match',
     UPDATE: 'update-match',
     DELETE: 'delete-match'
+  },
+
+  PLAYER_STATS: {
+    BASE: 'PlayerStats',
+    CREATE: 'CreatePlayerStats',
+    GET_ALL: 'GetAllPlayerStats'
+  },
+
+  MATCH_SCORE: {
+    BASE: 'MatchScore',
+    CREATE: 'create-score',
+    GET_BY_MATCH: 'get-scores'
   }
+
 };

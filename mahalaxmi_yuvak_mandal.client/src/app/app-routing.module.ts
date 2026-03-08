@@ -14,6 +14,8 @@ import { MatchDetailsComponent } from './components/match-details/match-details.
 import { EditMatchComponent } from './components/edit-match/edit-match.component';
 import { CreateMatchComponent } from './components/create-match/create-match.component';
 import { ListMatchComponent } from './components/list-match/list-match.component';
+import { CreatePlayerStatsComponent } from './components/create-player-stats/create-player-stats.component';
+import { ListPlayerStatsComponent } from './components/list-player-stats/list-player-stats.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -57,6 +59,16 @@ const routes: Routes = [
       { path: 'create-match', component: CreateMatchComponent },
       { path: 'edit-match/:id', component: EditMatchComponent },
       { path: 'match-details/:id', component: MatchDetailsComponent },
+
+      {
+        path: 'create-player-stats',
+        component: CreatePlayerStatsComponent
+      },
+      {
+        path: 'list-player-stats',
+        component: ListPlayerStatsComponent
+      }
+
     ]
   },
 

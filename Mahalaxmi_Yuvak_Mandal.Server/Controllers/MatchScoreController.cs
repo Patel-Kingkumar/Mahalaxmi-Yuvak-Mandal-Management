@@ -30,12 +30,20 @@ namespace CricketAPI.Controllers
 
             await con.ExecuteAsync(
                 "sp_InsertMatchScore",
-                model,
+                new
+                {
+                    model.MatchId,
+                    model.TeamName,
+                    model.Runs,
+                    model.Wickets,
+                    model.OversPlayed
+                },
                 commandType: CommandType.StoredProcedure
             );
 
             return Ok(new { message = "Score added successfully" });
         }
+
 
         // GET SCORES BY MATCH
         [HttpGet("get-scores/{matchId}")]

@@ -17,39 +17,35 @@ namespace CricketAPI.Controllers
             _configuration = configuration;
         }
 
-        private SqlConnection GetConnection()
+        // Insert
+        [HttpPost("CreatePlayerStats")]
+        public async Task<IActionResult> CreatePlayerStats(PlayerStats stats)
         {
-            return new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            using var con = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+
+            var result = await con.ExecuteAsync(
+                "sp_InsertPlayerStats",
+                stats,
+                commandType: CommandType.StoredProcedure
+            );
+
+            return Ok(result);
         }
 
-        // GET PLAYER STATS
-        [HttpGet("get-player-stats")]
-        public async Task<IActionResult> GetPlayerStats(int? userId)
-        {
-            using var con = GetConnection();
 
-            var stats = await con.QueryAsync(
-                "sp_GetPlayerStats",
-                new { UserId = userId },
+        // List
+        [HttpGet("GetAllPlayerStats")]
+        public async Task<IActionResult> GetAllPlayerStats()
+        {
+            using var con = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+
+            var stats = await con.QueryAsync<PlayerStats>(
+                "sp_GetAllPlayerStats",
                 commandType: CommandType.StoredProcedure
             );
 
             return Ok(stats);
         }
-
-        // INSERT PLAYER STATS
-        [HttpPost("create-player-stats")]
-        public async Task<IActionResult> CreatePlayerStats([FromBody] PlayerStat model)
-        {
-            using var con = GetConnection();
-
-            await con.ExecuteAsync(
-                "sp_InsertPlayerStats",
-                model,
-                commandType: CommandType.StoredProcedure
-            );
-
-            return Ok(new { message = "Player stats added successfully" });
-        }
     }
+
 }
