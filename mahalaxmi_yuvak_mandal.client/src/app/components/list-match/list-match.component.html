@@ -1,8 +1,17 @@
 <div class="container mt-4">
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <h3>Match List</h3>
-
-    <a routerLink="/create-match" class="btn btn-primary"> Create Match </a>
+    <h2 class="m-0">Match List</h2>
+    <div class="d-flex gap-2">
+      <a routerLink="/create-match" class="btn btn-primary">Create Match</a>
+      <!-- PDF Download Button with Loading State -->
+      <button
+        type="button"
+        class="btn btn-danger d-flex align-items-center"
+        (click)="downloadPdfReport()"
+      >
+        <i class="fas fa-file-pdf"></i>
+      </button>
+    </div>
   </div>
 
   <table class="table table-bordered table-striped">

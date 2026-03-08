@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environment';
 import { API_ENDPOINTS } from '../core/api-endpoints';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +38,13 @@ export class MatchService {
   getScores(matchId: number) {
     return this.http.get<any>(
       `${this.baseUrl}/${API_ENDPOINTS.MATCH_SCORE.BASE}/${API_ENDPOINTS.MATCH_SCORE.GET_BY_MATCH}/${matchId}`
+    );
+  }
+
+  downloadMatchesPdf(): Observable<Blob> {
+    return this.http.get(
+      `${this.baseUrl}/${API_ENDPOINTS.MATCHES.BASE}/${API_ENDPOINTS.MATCHES.DOWNLOAD_PDF}`,
+      { responseType: 'blob' } // Critical for PDF files
     );
   }
 

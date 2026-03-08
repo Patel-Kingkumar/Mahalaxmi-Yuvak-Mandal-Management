@@ -26,13 +26,15 @@ export const API_ENDPOINTS = {
     GET_ALL: 'get-matches',
     GET_BY_ID: 'get-match',
     UPDATE: 'update-match',
-    DELETE: 'delete-match'
+    DELETE: 'delete-match',
+    DOWNLOAD_PDF: 'DownloadMatchesPdf'
   },
 
   PLAYER_STATS: {
     BASE: 'PlayerStats',
     CREATE: 'CreatePlayerStats',
-    GET_ALL: 'GetAllPlayerStats'
+    GET_ALL: 'GetAllPlayerStats',
+    DOWNLOAD_PDF: 'DownloadPlayerStatsPdf'
   },
 
   MATCH_SCORE: {

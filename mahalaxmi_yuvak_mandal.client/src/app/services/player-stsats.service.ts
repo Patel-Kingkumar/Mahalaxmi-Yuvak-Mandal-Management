@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { API_ENDPOINTS } from '../core/api-endpoints';
 import { environment } from '../../environment';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,13 @@ export class PlayerStsatsService {
   getAllPlayerStats() {
     return this.http.get(
       `${this.baseUrl}/${API_ENDPOINTS.PLAYER_STATS.BASE}/${API_ENDPOINTS.PLAYER_STATS.GET_ALL}`
+    );
+  }
+
+  downloadPlayerStatsPdf(): Observable<Blob> {
+    return this.http.get(
+      `${this.baseUrl}/${API_ENDPOINTS.PLAYER_STATS.BASE}/${API_ENDPOINTS.PLAYER_STATS.DOWNLOAD_PDF}`,
+      { responseType: 'blob' } // Critical for PDF files
     );
   }
 }
