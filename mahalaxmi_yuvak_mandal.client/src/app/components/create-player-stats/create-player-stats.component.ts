@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PlayerStsatsService } from '../../services/player-stsats.service';
+import { MatchService } from '../../services/match.service';
 
 @Component({
   selector: 'app-create-player-stats',
@@ -11,17 +12,20 @@ import { PlayerStsatsService } from '../../services/player-stsats.service';
 export class CreatePlayerStatsComponent implements OnInit {
 
   statsForm!: FormGroup;
+  matches: any[] = [];
+
 
   constructor(
     private fb: FormBuilder,
-    private statsService: PlayerStsatsService
+    private statsService: PlayerStsatsService,
+    private matchService: MatchService
   ) { }
 
   ngOnInit(): void {
 
     this.statsForm = this.fb.group({
 
-      matchId: ['', Validators.required],
+      matchId: [null, Validators.required],
       playerName: ['', Validators.required],
       teamName: ['', Validators.required],
 
@@ -35,11 +39,18 @@ export class CreatePlayerStatsComponent implements OnInit {
       wickets: [0]
 
     });
+    this.getMatches();
+  }
 
+  getMatches() {
+    this.matchService.getAllMatches().subscribe((res: any) => {
+      this.matches = res;
+    });
   }
 
   saveStats() {
 
+    console.log("condition  : ", this.statsForm.value);
     if (this.statsForm.invalid) {
       return;
     }

@@ -5,10 +5,12 @@
     </div>
 
     <div class="card-body">
-      <div class="form-group">
-        <label>Match Id</label>
-        <input type="number" class="form-control" formControlName="matchId" />
-      </div>
+      <select class="form-control" formControlName="matchId">
+        <option value="">Select Match</option>
+        <option *ngFor="let match of matches" [ngValue]="match.MatchId">
+          {{ match.TeamA }} vs {{ match.TeamB }} - {{ match.MatchDate | date }}
+        </option>
+      </select>
 
       <div class="form-group">
         <label>Player Name</label>
@@ -45,7 +47,7 @@
       </div>
 
       <div class="form-group">
-        <label>Overs Bowled</label>
+        <label>Overs Bowled (Decimal)</label>
         <input
           type="number"
           step="0.1"
@@ -55,7 +57,7 @@
       </div>
 
       <div class="form-group">
-        <label>Runs Conceded</label>
+        <label>Runs Given</label>
         <input
           type="number"
           class="form-control"

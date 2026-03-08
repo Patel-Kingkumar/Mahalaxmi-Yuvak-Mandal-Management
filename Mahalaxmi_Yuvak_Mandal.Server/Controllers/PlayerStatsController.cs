@@ -23,13 +23,34 @@ namespace CricketAPI.Controllers
         {
             using var con = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
 
+            // Map Model properties to Stored Procedure parameters
+            var param = new
+            {
+                stats.MatchId,
+                stats.PlayerName,
+                stats.TeamName,
+
+                Runs = stats.RunsScored,
+                BallsFaced = stats.BallsPlayed,
+                stats.Fours,
+                stats.Sixes,
+
+                OversBowled = stats.OversBowled,
+                RunsConceded = stats.RunsGiven,
+                Wickets = stats.WicketsTaken
+            };
+
             var result = await con.ExecuteAsync(
                 "sp_InsertPlayerStats",
-                stats,
+                param,
                 commandType: CommandType.StoredProcedure
             );
 
-            return Ok(result);
+            return Ok(new
+            {
+                message = "Player stats inserted successfully",
+                rowsAffected = result
+            });
         }
 
 
