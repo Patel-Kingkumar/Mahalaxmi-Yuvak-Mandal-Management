@@ -54,47 +54,47 @@ export class LoginComponent {
         sessionStorage.setItem('role', res.role);
         // this.toastr.success('Login successful!');
         // this.toastr.info('Saved!', '', {
-        positionClass: 'toast-bottom-right'
-      });
-    this.message = 'Login successful!';
-    this.router.navigate(['/dashboard']);   // ✅ Redirect here
-  },
-  error: err => {
-  this.message = 'Invalid credentials or role.';
-  // this.toastr.error('Invalid credentials or role.');
-}
+        //   positionClass: 'toast-bottom-right'
+        // });
+        this.message = 'Login successful!';
+        this.router.navigate(['/dashboard']);   // ✅ Redirect here
+      },
+      error: err => {
+        this.message = 'Invalid credentials or role.';
+        // this.toastr.error('Invalid credentials or role.');
+      }
     });
   }
 
-forgotPassword() {
-  this.showForgot = true;
-}
+  forgotPassword() {
+    this.showForgot = true;
+  }
 
-sendOTP() {
-  if (this.forgotForm.invalid) return;
+  sendOTP() {
+    if (this.forgotForm.invalid) return;
 
-  const email = this.forgotForm.value.email;
-  this.auth.sendOTP(email).subscribe({
-    next: res => {
-      this.showOTP = true;
-      this.otpForm.patchValue({ email });
-      this.message = 'OTP sent to your email!';
-    },
-    error: err => this.message = 'Email not found.'
-  });
-}
+    const email = this.forgotForm.value.email;
+    this.auth.sendOTP(email).subscribe({
+      next: res => {
+        this.showOTP = true;
+        this.otpForm.patchValue({ email });
+        this.message = 'OTP sent to your email!';
+      },
+      error: err => this.message = 'Email not found.'
+    });
+  }
 
-resetPassword() {
-  if (this.otpForm.invalid) return;
+  resetPassword() {
+    if (this.otpForm.invalid) return;
 
-  this.auth.resetPassword(this.otpForm.value).subscribe({
-    next: res => {
-      this.message = 'Password reset successful! Login now.';
-      this.showForgot = false;
-      this.showOTP = false;
-      this.loginForm.patchValue({ email: this.otpForm.value.email });
-    },
-    error: err => this.message = 'OTP invalid or expired.'
-  });
-}
+    this.auth.resetPassword(this.otpForm.value).subscribe({
+      next: res => {
+        this.message = 'Password reset successful! Login now.';
+        this.showForgot = false;
+        this.showOTP = false;
+        this.loginForm.patchValue({ email: this.otpForm.value.email });
+      },
+      error: err => this.message = 'OTP invalid or expired.'
+    });
+  }
 }
