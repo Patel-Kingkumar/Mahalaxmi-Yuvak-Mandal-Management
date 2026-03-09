@@ -45,7 +45,7 @@ export class CreateMatchComponent {
     this.matchService.createMatch(this.matchForm.value).subscribe({
 
       next: () => {
-        this.toastr.success('Match Created Successfully');
+        // this.toastr.success('Match Created Successfully');
         this.router.navigate(['/list-match']);
       },
 

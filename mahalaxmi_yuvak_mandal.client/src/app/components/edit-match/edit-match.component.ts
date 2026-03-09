@@ -68,7 +68,7 @@ export class EditMatchComponent {
     this.matchService.updateMatch(this.matchId, this.matchForm.value).subscribe({
 
       next: () => {
-        this.toastr.success('Match Updated Successfully');
+        // this.toastr.success('Match Updated Successfully');
         this.router.navigate(['/list-match']);
       },
 

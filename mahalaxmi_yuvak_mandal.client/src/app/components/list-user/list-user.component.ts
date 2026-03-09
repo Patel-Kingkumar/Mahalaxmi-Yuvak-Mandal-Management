@@ -57,7 +57,7 @@ export class ListUserComponent implements OnInit {
 
     this.userService.deleteUser(id).subscribe({
       next: () => {
-        this.toastr.success('User deleted successfully');
+        // this.toastr.success('User deleted successfully');
 
 
         // refresh list

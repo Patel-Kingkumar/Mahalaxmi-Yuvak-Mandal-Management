@@ -66,11 +66,11 @@ export class EditUserComponent {
     this.userService.updateUser(this.userId, formData)
       .subscribe({
         next: () => {
-          this.toastr.success('User updated successfully');
+          // this.toastr.success('User updated successfully');
           this.router.navigate(['/list-users']);
         },
         error: (err) => {
-          this.toastr.error('Error updating user');
+          // this.toastr.error('Error updating user');
         }
       });
 

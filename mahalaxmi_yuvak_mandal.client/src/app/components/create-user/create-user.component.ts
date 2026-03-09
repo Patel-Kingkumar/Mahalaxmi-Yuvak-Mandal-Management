@@ -43,12 +43,12 @@ export class CreateUserComponent {
     this.userService.createUser(this.createUserForm.value)
       .subscribe({
         next: (res) => {
-          this.toastr.success('User created successfully');
+          // this.toastr.success('User created successfully');
           this.createUserForm.reset({ role: 'User', isActive: true });
 
         },
         error: (err) => {
-          this.toastr.error('Error creating user');
+          // this.toastr.error('Error creating user');
         }
       });
 
