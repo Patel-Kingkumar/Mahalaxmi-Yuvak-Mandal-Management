@@ -1,0 +1,116 @@
+[HttpGet("DownloadDonationReport")]
+public async Task<IActionResult> DownloadDonationReport()
+{
+    string connectionString = _configuration.GetConnectionString("DefaultConnection");
+
+    using var con = new SqlConnection(connectionString);
+
+    // Example: get user role & ID (from session / claims)
+    string userRole = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "role")?.Value ?? "User";
+    int? userId = null;
+
+    if (userRole != "Admin")
+    {
+        // Use NameIdentifier (preferred) or "userId" if you added custom claim
+        string userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        if (!string.IsNullOrEmpty(userIdClaim))
+            userId = Convert.ToInt32(userIdClaim);
+    }
+
+    Console.WriteLine($"Logged-in userId: {userId}");
+
+    // Call SP with UserId for non-admin, NULL for admin
+    var donations = await con.QueryAsync(
+        "sp_GetDonationReport",
+        new { UserId = userId },  // NULL → admin, userId → single user
+        commandType: CommandType.StoredProcedure
+    );
+
+    // PDF generation with header/footer images (optional)
+    var headerPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "header.png");
+    byte[] headerImage = System.IO.File.Exists(headerPath) ? System.IO.File.ReadAllBytes(headerPath) : null;
+
+    var stampPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "stamp.png");
+    byte[] stampImage = System.IO.File.Exists(stampPath) ? System.IO.File.ReadAllBytes(stampPath) : null;
+
+    string mandalOrangeHex = "#F37335";
+    string mandalBlueHex = "#1F4E79";
+
+    var pdfBytes = QuestPDF.Fluent.Document.Create(container =>
+    {
+        container.Page(page =>
+        {
+            page.Size(PageSizes.A4);
+            page.Margin(20);
+
+            // HEADER IMAGE
+            page.Header().Height(150).Element(header =>
+            {
+                if (headerImage != null)
+                    header.Image(headerImage, ImageScaling.FitWidth);
+            });
+
+            // CONTENT TABLE
+            page.Content().PaddingVertical(10).Table(table =>
+            {
+                table.ColumnsDefinition(columns =>
+                {
+                    columns.ConstantColumn(40);
+                    columns.RelativeColumn(2);
+                    columns.RelativeColumn(2);
+                    columns.ConstantColumn(80);
+                    columns.ConstantColumn(60);
+                    columns.RelativeColumn(2);
+                });
+
+                // TABLE HEADER
+                table.Header(header =>
+                {
+                    string[] headers = { "ID", "User", "Celebration", "Amount", "Year", "Date" };
+                    foreach (var h in headers)
+                        header.Cell().Border(1).Padding(5).Text(h).SemiBold();
+                });
+
+                // TABLE DATA
+                foreach (var d in donations)
+                {
+                    int id = (int)d.DonationId;
+                    string fullName = (string)d.FullName;
+                    string celebration = (string)d.CelebrationName;
+                    decimal amount = (decimal)d.Amount;
+                    int year = (int)d.Year;
+                    DateTime date = (DateTime)d.DonationDate;
+
+                    table.Cell().Border(1).Padding(5).Text(id.ToString());
+                    table.Cell().Border(1).Padding(5).Text(fullName);
+                    table.Cell().Border(1).Padding(5).Text(celebration);
+                    table.Cell().Border(1).Padding(5).Text($"₹ {amount}");
+                    table.Cell().Border(1).Padding(5).Text(year.ToString());
+                    table.Cell().Border(1).Padding(5).Text(date.ToString("dd-MMM-yyyy"));
+                }
+            });
+
+            // FOOTER
+            page.Footer().Height(100).Row(row =>
+            {
+                var now = DateTime.Now;
+
+                if (stampImage != null)
+                    row.ConstantColumn(120).Height(80).AlignMiddle().Image(stampImage, ImageScaling.FitArea);
+
+                row.RelativeColumn().AlignRight().AlignMiddle().Column(col =>
+                {
+                    col.Item().Text("Authorized Signature").Italic().FontSize(12);
+                    col.Item().Text("𝓜𝓪𝓱𝓪𝓵𝓪𝔁𝓶𝓲 𝓨𝓾𝓿𝓪𝓴 𝓜𝓪𝓷𝓭𝓪𝓵").FontSize(10).FontColor(mandalOrangeHex).Italic();
+                    col.Item().Text("ESTD 2005").FontSize(10).FontColor(mandalBlueHex);
+                    col.Item().PaddingTop(10).Text($"Date: {now:dd-MMMM-yyyy hh:mm tt}").FontSize(10);
+                });
+            });
+
+        });
+    }).GeneratePdf();
+
+    var fileName = $"DonationReport_{DateTime.Now:dd-MMMM-yyyy}.pdf";
+
+    return File(pdfBytes, "application/pdf", fileName);
+}

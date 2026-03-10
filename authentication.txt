@@ -1,0 +1,209 @@
+kingpatel0409@gmail.com
+
+kingpatel2275479@gmail.com
+
+kingpatel0409@outlook.com
+king_cyber_security_0409
+
+
+
+
+
+
+
+using BCrypt.Net;
+using Mahalaxmi_Yuvak_Mandal.Server.DTOs;
+using Mahalaxmi_Yuvak_Mandal.Server.Models;
+using Microsoft.AspNetCore.Identity.Data;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using MimeKit;
+using System.Data;
+using MailKit.Net.Smtp;
+using MimeKit;
+
+[Route("api/[controller]")]
+[ApiController]
+public class AuthController : ControllerBase
+{
+    private readonly IConfiguration _config;
+
+    public AuthController(IConfiguration config)
+    {
+        _config = config;
+    }
+
+    private SqlConnection GetConnection()
+    {
+        return new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+    }
+
+    // ================= LOGIN =================
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(LoginRequestDTO model)
+    {
+        using var con = GetConnection();
+        using var cmd = new SqlCommand("sp_LoginUser", con);
+        cmd.CommandType = CommandType.StoredProcedure;
+
+        cmd.Parameters.AddWithValue("@Email", model.Email);
+        cmd.Parameters.AddWithValue("@RoleName", model.RoleName);
+
+        await con.OpenAsync();
+        using var reader = await cmd.ExecuteReaderAsync();
+
+        if (!reader.Read())
+            return BadRequest("Invalid credentials");
+
+        var passwordHash = reader["PasswordHash"].ToString();
+
+        if (!BCrypt.Net.BCrypt.Verify(model.Password, passwordHash))
+            return BadRequest("Invalid password");
+
+        return Ok(new
+        {
+            Message = "Login successful",
+            UserId = reader["Id"],
+            Name = reader["FullName"],
+            Role = reader["RoleName"]
+        });
+    }
+
+    // ================= FORGOT PASSWORD =================
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPassword(ForgotPasswordRequestDTO model)
+    {
+        var otp = new Random().Next(100000, 999999).ToString();
+
+        using var con = GetConnection();
+        using var cmd = new SqlCommand("sp_GenerateOtp", con);
+        cmd.CommandType = CommandType.StoredProcedure;
+
+        cmd.Parameters.AddWithValue("@Email", model.Email);
+        cmd.Parameters.AddWithValue("@Otp", otp);
+
+        await con.OpenAsync();
+        var rows = await cmd.ExecuteNonQueryAsync();
+
+        if (rows == 0)
+            return NotFound("User not found");
+
+        // TODO: Send OTP via email
+
+        return Ok(new { Message = "OTP sent successfully" });
+    }
+
+    // ================= VERIFY OTP =================
+    [HttpPost("verify-otp")]
+    public async Task<IActionResult> VerifyOtp(VerifyOtpRequest model)
+    {
+        using var con = GetConnection();
+        using var cmd = new SqlCommand("sp_VerifyOtp", con);
+        cmd.CommandType = CommandType.StoredProcedure;
+
+        cmd.Parameters.AddWithValue("@Email", model.Email);
+        cmd.Parameters.AddWithValue("@Otp", model.Otp);
+
+        await con.OpenAsync();
+        using var reader = await cmd.ExecuteReaderAsync();
+
+        if (!reader.Read())
+            return BadRequest("Invalid or expired OTP");
+
+        return Ok(new { Message = "OTP verified" });
+    }
+
+    // ================= RESET PASSWORD =================
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword(ResetPasswordRequest model)
+    {
+        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.NewPassword);
+
+        using var con = GetConnection();
+        using var cmd = new SqlCommand("sp_ResetPassword", con);
+        cmd.CommandType = CommandType.StoredProcedure;
+
+        cmd.Parameters.AddWithValue("@Email", model.Email);
+        cmd.Parameters.AddWithValue("@NewPasswordHash", hashedPassword);
+
+        await con.OpenAsync();
+        var rows = await cmd.ExecuteNonQueryAsync();
+
+        if (rows == 0)
+            return NotFound("User not found");
+
+        return Ok(new { Message = "Password reset successful" });
+    }
+
+    [HttpPost("send-otp")]
+    public async Task<IActionResult> SendOtp([FromBody] SendOtpRequestDTO model)
+    {
+        var otp = new Random().Next(100000, 999999).ToString();
+
+        using var con = GetConnection();
+        using var cmd = new SqlCommand("sp_GenerateOtp", con);
+        cmd.CommandType = CommandType.StoredProcedure;
+
+        cmd.Parameters.AddWithValue("@Email", model.Email);
+        cmd.Parameters.AddWithValue("@Otp", otp);
+
+        await con.OpenAsync();
+        var rows = await cmd.ExecuteNonQueryAsync();
+
+        if (rows == 0)
+            return NotFound(new { Message = "User not found" });
+
+        // ================= SEND EMAIL =================
+        var message = new MimeMessage();
+        message.From.Add(new MailboxAddress("Mahalaxmi Yuvak Mandal", "kingpatel2275479@gmail.com"));
+        message.To.Add(MailboxAddress.Parse(model.Email));
+        message.Subject = "Your OTP Code";
+        message.Body = new TextPart("plain")
+        {
+            Text = $"Your OTP code is: {otp}. It is valid for 10 minutes."
+        };
+
+        using var smtp = new SmtpClient();
+        await smtp.ConnectAsync("smtp.gmail.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
+        await smtp.AuthenticateAsync("kingpatel2275479@gmail.com", "KingPatel2275"); // use app password for Gmail
+        await smtp.SendAsync(message);
+        await smtp.DisconnectAsync(true);
+
+        return Ok(new { Message = "OTP sent successfully" });
+    }
+}
+
+
+
+
+How to Generate a Google App Password:
+
+Go to your Google Account settings: https://myaccount.google.com/security
+
+Enable 2-Step Verification (if not already enabled). This is required for app passwords.
+
+Under "Signing in to Google", click App Passwords.
+
+You may be asked to log in again.
+
+In the App Passwords page:
+
+Select Mail as the app.
+
+Select your device or choose Other (Custom name) and type something like "MyDotNetApp".
+
+Click Generate.
+
+Google will show a 16-character app password (no spaces). Copy this exactly.
+
+
+
+
+
+
+
+How to use this App Password in your .NET MailKit code:
+
+Replace the password you used before with this app password in your smtp.AuthenticateAsync call:
+
+await smtp.AuthenticateAsync("your-email@gmail.com", "your-app-password-here");

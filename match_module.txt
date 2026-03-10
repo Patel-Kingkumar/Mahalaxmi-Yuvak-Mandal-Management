@@ -1,0 +1,205 @@
+api/Match
+    get-matches
+    get-match/{id}
+    create-match
+    update-match/{id}
+    delete-match/{id}
+
+api/MatchScore
+    create-score
+    get-scores/{matchId}
+
+api/PlayerStats
+    get-player-stats
+    create-player-stats
+
+api/Statistics
+    total-matches
+    highest-run-scorer
+    most-wickets
+
+
+
+api/Match
+    get-matches
+    get-match/{id}
+    create-match
+    update-match/{id}
+    delete-match/{id}
+
+api/MatchScore
+    create-score
+    get-scores/{matchId}
+
+api/PlayerStats
+    get-player-stats
+    create-player-stats
+
+api/Statistics
+    total-matches
+    highest-run-scorer
+    most-wickets
+
+
+
+
+---------------------
+
+
+1️⃣ Match Module Components
+
+These manage matches.
+
+matches/
+    list-match
+    create-match
+    edit-match
+    match-details
+
+Components
+
+1️⃣ ListMatchComponent 👍
+Shows all matches
+
+2️⃣ CreateMatchComponent 👍
+Add new match
+
+3️⃣ EditMatchComponent 👍
+Update match
+
+4️⃣ MatchDetailsComponent 👍
+Shows match summary + scorecard
+
+2️⃣ Match Score Module 👍
+
+Handles team scores for a match.
+
+match-scores/
+    create-score
+    scorecard
+
+Components
+
+5️⃣ CreateScoreComponent 👍
+Add team score
+
+6️⃣ ScorecardComponent 👍
+Shows:
+
+Team A 145/6 (20)
+Team B 130/8 (20)
+
+3️⃣ Player Performance Module
+
+For batting + bowling stats.
+
+player-stats/
+    create-player-stats
+    list-player-stats
+
+Components
+
+7️⃣ CreatePlayerStatsComponent
+Add player performance
+
+8️⃣ ListPlayerStatsComponent
+Shows stats table
+
+4️⃣ Statistics Dashboard
+
+Shows analytics.
+
+statistics/
+    dashboard
+
+Components
+
+9️⃣ StatisticsDashboardComponent
+
+Shows:
+
+Total Matches
+Highest Run Scorer
+Most Wickets
+Most Man of the Match
+
+5️⃣ Reports Module (PDF)
+
+Optional but useful.
+
+reports/
+    match-report
+    player-report
+
+Components
+
+🔟 MatchReportComponent
+Generate Match PDF
+
+1️⃣1️⃣ PlayerReportComponent
+Generate Player Stats PDF
+
+Final Component List (Must Create)
+
+---------------------
+list-match
+create-match
+edit-match
+match-details
+
+create-score
+scorecard
+
+create-player-stats remian
+list-player-stats remian
+
+statistics-dashboard remian
+
+match-report remian
+player-report remian
+
+
+
+MATCH MODULE 
+
+| Component       | Use                    |
+| --------------- | ---------------------- |
+| `list-match`    | Show all matches       |
+| `create-match`  | Create new match       |
+| `edit-match`    | Update match           |
+| `match-details` | Show match information |
+
+
+
+-- View All Matches
+SELECT * FROM Matches;
+-- View All Player Stats
+SELECT * FROM PlayerStats;
+
+-- View Player Stats with Match & User Info (Recommended)
+SELECT 
+    ps.PlayerStatId,
+    m.MatchId,
+    u.FullName  AS PlayerName,
+    ps.TeamName,
+    ps.RunsScored,
+    ps.BallsPlayed,
+    ps.Fours,
+    ps.Sixes,
+    ps.WicketsTaken,
+    ps.OversBowled,
+    ps.RunsGiven,
+    ps.Catches
+FROM PlayerStats ps
+INNER JOIN Matches m ON ps.MatchId = m.MatchId
+INNER JOIN Users u ON ps.UserId = u.Id;
+
+-- View Matches with Team Names
+SELECT 
+ *
+FROM Matches;
+
+
+
+
+----------------------------

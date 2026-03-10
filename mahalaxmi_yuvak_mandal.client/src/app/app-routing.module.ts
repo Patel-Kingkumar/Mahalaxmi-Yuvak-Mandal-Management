@@ -36,20 +36,20 @@ const routes: Routes = [
         path: 'create-user',
         component: CreateUserComponent,
         canActivate: [authGuard],
-        data: { roles: ['admin'] }
+        data: { roles: ['Admin'] }
       },
 
       {
         path: 'edit-user/:id',
         component: EditUserComponent,
         canActivate: [authGuard],
-        data: { roles: ['admin'] }
+        data: { roles: ['Admin'] }
       },
       {
         path: 'create-donation',
         component: CreateDonationComponent,
         canActivate: [authGuard],
-        data: { roles: ['admin'] }
+        data: { roles: ['Admin'] }
       },
       { path: 'list-users', component: ListUserComponent },
       { path: 'list-admins', component: AdminListComponent },

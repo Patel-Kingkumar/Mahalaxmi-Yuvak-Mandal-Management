@@ -34,4 +34,11 @@ export class AuthService {
       { responseType: 'blob' } // Critical for PDF files
     );
   }
+
+  logout() {
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('userId');
+    sessionStorage.removeItem('role');
+  }
+
 }

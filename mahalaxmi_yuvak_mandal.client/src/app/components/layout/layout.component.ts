@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 declare var $: any;
 
@@ -11,7 +12,18 @@ declare var $: any;
 })
 export class LayoutComponent implements OnInit, AfterViewInit {
 
-  constructor(private router: Router) { }
+  constructor(private auth: AuthService, private router: Router) { }
+
+  onLogout() {
+    const confirmLogout = confirm('Are you sure you want to logout?');
+
+    if (confirmLogout) {
+      this.auth.logout();
+      this.router.navigate(['/login']);
+    }
+  }
+
+
 
   ngOnInit() {
 
