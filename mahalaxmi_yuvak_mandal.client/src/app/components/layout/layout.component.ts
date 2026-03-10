@@ -43,6 +43,7 @@ export class LayoutComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
 
+    $('[data-widget="treeview"]').Treeview('init');
     // $('[data-widget="treeview"]').Treeview('init');
 
   }
