@@ -4,10 +4,13 @@
 
 <form [formGroup]="scoreForm" (ngSubmit)="addScore()">
   <div class="row">
-    <div class="col-md-3">
-      <label>Team Name</label>
-      <input type="text" class="form-control" formControlName="teamName" />
-    </div>
+    <select class="form-control" formControlName="teamName">
+      <option value="">Select Team</option>
+      <option *ngFor="let team of teams; let i = index" [value]="team">
+        {{ team }}
+        {{ i === 0 ? "(First Batting)" : "(First Bowling)" }}
+      </option>
+    </select>
 
     <div class="col-md-2">
       <label>Runs</label>
@@ -30,29 +33,57 @@
     </div>
 
     <div class="col-md-2 mt-4">
-      <button class="btn btn-success">Add Score</button>
+      <button class="btn btn-success" [disabled]="">Add Score</button>
     </div>
   </div>
 </form>
 
 <h4 class="mt-4">Scorecard</h4>
 
-<table class="table table-bordered">
-  <thead>
+<table class="table table-hover">
+  <thead class="table-light">
     <tr>
       <th>Team</th>
       <th>Runs</th>
       <th>Wickets</th>
       <th>Overs</th>
+      <th class="text-center">Winner</th>
+      <!-- New Column -->
     </tr>
   </thead>
 
   <tbody>
     <tr *ngFor="let s of scores">
-      <td>{{ s.TeamName }}</td>
+      <td class="fw-bold">{{ s.TeamName }}</td>
       <td>{{ s.Runs }}</td>
       <td>{{ s.Wickets }}</td>
       <td>{{ s.OversPlayed }}</td>
+      <td class="text-center">
+        <!-- Display Trophy and Winner Badge if this team matches the winner -->
+        <div *ngIf="s.TeamName === match?.WinnerTeam">
+          <span class="badge bg-success">
+            <i class="bi bi-trophy-fill me-1"></i> Winner
+          </span>
+          <span class="ms-1">🏆</span>
+        </div>
+      </td>
+    </tr>
+    <!-- Placeholder if no scores yet -->
+    <tr *ngIf="scores.length === 0">
+      <td colspan="5" class="text-center text-muted">No data added yet.</td>
     </tr>
   </tbody>
 </table>
+<div
+  class="card-footer bg-white d-flex justify-content-between align-items-center mt-2"
+>
+  <div>
+    <small class="text-muted">Total Runs: </small>
+    <span class="fw-bold">{{ calculateTotalRuns() }}</span>
+  </div>
+
+  <!-- Only show 'Complete Match' when both teams have played -->
+  <h3 class="btn btn-outline-primary btn-sm" *ngIf="scores.length === 2">
+    Complete Match
+  </h3>
+</div>

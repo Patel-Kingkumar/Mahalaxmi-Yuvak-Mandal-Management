@@ -2,7 +2,12 @@
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h2 class="m-0">Match List</h2>
     <div class="d-flex gap-2">
-      <a routerLink="/create-match" class="btn btn-primary">Create Match</a>
+      <a
+        routerLink="/create-match"
+        class="btn btn-primary"
+        *ngIf="userRole === 'Admin'"
+        >Create Match</a
+      >
       <!-- PDF Download Button with Loading State -->
       <button
         type="button"
@@ -17,9 +22,9 @@
   <table class="table table-bordered table-striped">
     <thead class="table-dark">
       <tr>
-        <th>#</th>
-        <th>Team A</th>
-        <th>Team B</th>
+        <th>Match Id</th>
+        <th>Team A (Batting First)</th>
+        <th>Team B (Bowling First)</th>
         <th>Match Date</th>
         <th>Ground</th>
         <th>Overs</th>
@@ -31,7 +36,7 @@
 
     <tbody>
       <tr *ngFor="let match of matches; let i = index">
-        <td>{{ i + 1 }}</td>
+        <td>{{ match.MatchId }}</td>
 
         <td>{{ match.TeamA }}</td>
 
@@ -47,7 +52,7 @@
 
         <td>{{ match.WinnerTeam }}</td>
 
-        <td>
+        <td *ngIf="userRole === 'Admin'">
           <a
             class="btn btn-info btn-sm me-1"
             [routerLink]="['/match-details', match.MatchId]"

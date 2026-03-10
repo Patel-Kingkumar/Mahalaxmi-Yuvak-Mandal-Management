@@ -17,6 +17,7 @@ import { ListMatchComponent } from './components/list-match/list-match.component
 import { CreatePlayerStatsComponent } from './components/create-player-stats/create-player-stats.component';
 import { ListPlayerStatsComponent } from './components/list-player-stats/list-player-stats.component';
 import { DashboardStatsComponent } from './components/dashboard-stats/dashboard-stats.component';
+import { leavePageGuard } from './guards/guards/leavePageGuard.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -59,7 +60,7 @@ const routes: Routes = [
       { path: 'list-match', component: ListMatchComponent },
       { path: 'create-match', component: CreateMatchComponent },
       { path: 'edit-match/:id', component: EditMatchComponent },
-      { path: 'match-details/:id', component: MatchDetailsComponent },
+      { path: 'match-details/:id', component: MatchDetailsComponent, canDeactivate: [leavePageGuard] },
 
       {
         path: 'create-player-stats',

@@ -10,10 +10,12 @@ import { MatchService } from '../../services/match.service';
 export class ListMatchComponent {
 
   matches: any[] = [];
+  userRole: string = '';
 
   constructor(private matchService: MatchService) { }
 
   ngOnInit() {
+    this.userRole = sessionStorage.getItem('role') || '';
     this.getMatches();
   }
 
@@ -24,13 +26,10 @@ export class ListMatchComponent {
   }
 
   deleteMatch(id: number) {
-
     if (confirm('Are you sure you want to delete this match?')) {
-
       this.matchService.deleteMatch(id).subscribe(() => {
         this.getMatches();
       });
-
     }
 
   }

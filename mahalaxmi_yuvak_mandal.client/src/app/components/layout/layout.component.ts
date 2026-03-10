@@ -48,4 +48,21 @@ export class LayoutComponent implements OnInit, AfterViewInit {
 
   }
 
+  toggleDarkMode(event: any) {
+
+    const isChecked = event.target.checked;
+
+    if (isChecked) {
+      document.body.classList.add('dark-mode');
+      localStorage.setItem('darkMode', 'true');
+    } else {
+      document.body.classList.remove('dark-mode');
+      localStorage.setItem('darkMode', 'false');
+    }
+
+  }
+
+
+
+
 }
