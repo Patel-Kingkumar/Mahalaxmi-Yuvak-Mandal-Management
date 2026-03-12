@@ -26,7 +26,6 @@ export class AppComponent implements OnInit, AfterViewInit {
 
 
   ngAfterViewInit() {
-    console.log("fsduiufysdiufysdf suifysiudofysdiofuysfiousyfisuoyf suiof ysioufysfiuoys fiousyfiousy fsiuf ysiufy sfiuoy sf");
 
     $('[data-widget="treeview"]').Treeview('init');
   }

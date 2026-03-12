@@ -5,7 +5,12 @@
     <div class="row">
       <div class="col-md-6 mb-3">
         <label>Match Date</label>
-        <input type="date" class="form-control" formControlName="matchDate" />
+        <input
+          type="date"
+          class="form-control"
+          formControlName="matchDate"
+          [max]="maxDate"
+        />
       </div>
 
       <div class="col-md-6 mb-3">

@@ -42,7 +42,6 @@ namespace Mahalaxmi_Yuvak_Mandal.Server.Controllers
             return Ok(result);
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpPost]
 public async Task<IActionResult> CreateUser([FromBody] CreateUserRequestDTO model)
         {
@@ -87,7 +86,6 @@ public async Task<IActionResult> CreateUser([FromBody] CreateUserRequestDTO mode
 
 
         // GET by Id
-        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
             public async Task<IActionResult> GetUserById(int id)
             {
@@ -104,7 +102,6 @@ public async Task<IActionResult> CreateUser([FromBody] CreateUserRequestDTO mode
             }
 
         // PUT /api/Users/{id}
-        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserRequestDTO model)
         {
@@ -139,7 +136,6 @@ public async Task<IActionResult> CreateUser([FromBody] CreateUserRequestDTO mode
         }
 
         // DELETE /api/Users/{id}
-        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
             public async Task<IActionResult> DeleteUser(int id)
             {

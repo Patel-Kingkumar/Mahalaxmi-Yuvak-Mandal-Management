@@ -13,13 +13,22 @@ import { ToastrService } from 'ngx-toastr';
 export class CreateMatchComponent {
 
   matchForm!: FormGroup;
+  maxDate: string;
 
   constructor(
     private fb: FormBuilder,
     private matchService: MatchService,
     private router: Router,
     private toastr: ToastrService
-  ) { }
+  ) {
+    const today = new Date();
+    // Subtract 1 day to get yesterday
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+
+    // Format to YYYY-MM-DD
+    this.maxDate = yesterday.toISOString().split('T')[0];
+  }
 
   ngOnInit() {
 

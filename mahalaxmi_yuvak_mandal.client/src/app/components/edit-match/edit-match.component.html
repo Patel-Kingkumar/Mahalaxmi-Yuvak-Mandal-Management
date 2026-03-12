@@ -15,7 +15,12 @@
 
       <div class="col-md-6 mb-3">
         <label>Match Date</label>
-        <input type="date" class="form-control" formControlName="MatchDate" />
+        <input
+          type="date"
+          class="form-control"
+          formControlName="MatchDate"
+          [max]="maxDate"
+        />
       </div>
 
       <div class="col-md-6 mb-3">

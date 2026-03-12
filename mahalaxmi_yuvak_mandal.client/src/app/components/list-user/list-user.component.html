@@ -2,7 +2,12 @@
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h2 class="m-0">Users List</h2>
     <div class="d-flex gap-2">
-      <a routerLink="/create-donation" class="btn btn-primary"> Create User </a>
+      <a
+        routerLink="/create-donation"
+        class="btn btn-primary"
+        *ngIf="userRole === 'Admin'"
+        >Create User</a
+      >
       <!-- PDF Download Button with Loading State -->
       <button
         type="button"

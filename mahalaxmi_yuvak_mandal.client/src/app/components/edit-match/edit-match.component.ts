@@ -14,6 +14,7 @@ export class EditMatchComponent {
 
   matchForm!: FormGroup;
   matchId!: number;
+  maxDate: string;
 
   constructor(
     private fb: FormBuilder,
@@ -21,7 +22,15 @@ export class EditMatchComponent {
     private route: ActivatedRoute,
     private router: Router,
     private toastr: ToastrService
-  ) { }
+  ) {
+    const today = new Date();
+    // Subtract 1 day to get yesterday
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+
+    // Format to YYYY-MM-DD
+    this.maxDate = yesterday.toISOString().split('T')[0]
+  }
 
   ngOnInit() {
 
@@ -43,11 +52,11 @@ export class EditMatchComponent {
   getMatchById() {
 
     this.matchService.getMatchById(this.matchId).subscribe((res: any) => {
-
+      console.log(res);
       this.matchForm.patchValue({
         TeamA: res.TeamA,
         TeamB: res.TeamB,
-        MatchDate: res.MatchDate,
+        MatchDate: res.MatchDate ? res.MatchDate.split('T')[0] : '',
         GroundName: res.GroundName,
         Overs: res.Overs,
         MatchType: res.MatchType,

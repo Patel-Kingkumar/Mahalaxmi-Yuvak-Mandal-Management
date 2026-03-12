@@ -58,13 +58,25 @@ const routes: Routes = [
 
       // match moduel
       { path: 'list-match', component: ListMatchComponent },
-      { path: 'create-match', component: CreateMatchComponent },
-      { path: 'edit-match/:id', component: EditMatchComponent },
+      {
+        path: 'create-match',
+        component: CreateMatchComponent,
+        canActivate: [authGuard],
+        data: { roles: ['Admin'] }
+      },
+      {
+        path: 'edit-match/:id', component: EditMatchComponent, canActivate: [authGuard],
+        data: { roles: ['Admin'] }
+      },
       { path: 'match-details/:id', component: MatchDetailsComponent, canDeactivate: [leavePageGuard] },
 
       {
         path: 'create-player-stats',
-        component: CreatePlayerStatsComponent
+        component: CreatePlayerStatsComponent,
+        canActivate: [authGuard],
+        data: {
+          roles: ['Admin']
+        }
       },
       {
         path: 'list-player-stats',

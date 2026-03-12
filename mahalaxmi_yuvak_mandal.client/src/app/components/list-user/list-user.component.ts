@@ -22,7 +22,7 @@ export class ListUserComponent implements OnInit {
   }
   getUsers() {
     this.userService.getAllUsers().subscribe(users => {
-      this.users = users;
+      this.users = users
     });
   }
 
